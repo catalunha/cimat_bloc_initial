@@ -55,7 +55,6 @@ class AuthenticationBloc
   FutureOr<void> _onAuthenticationEventLogoutRequested(
       AuthenticationEventLogoutRequested event,
       Emitter<AuthenticationState> emit) async {
-    print('_onAuthenticationEventLogoutRequested');
     try {
       bool logout = await _userRepository.logout();
       if (logout) {
@@ -64,7 +63,6 @@ class AuthenticationBloc
       return emit(const AuthenticationState.unauthenticated());
     } catch (_) {
       return emit(const AuthenticationState.unauthenticated());
-      // TODO
     }
   }
 

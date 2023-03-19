@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/authentication/authentication.dart';
 import '../../data/b4a/table/user/user_repository_b4a.dart';
-import 'bloc/login_bloc.dart';
+import '../user/login/bloc/login_bloc.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);

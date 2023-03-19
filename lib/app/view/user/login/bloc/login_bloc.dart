@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:cimat_bloc/app/core/models/user_model.dart';
 
-import '../../../data/repositories/user_repository.dart';
+import '../../../../data/repositories/user_repository.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';
