@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
+import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 
 import '../../../../core/models/user_model.dart';
 import '../../../../core/models/user_profile_model.dart';
