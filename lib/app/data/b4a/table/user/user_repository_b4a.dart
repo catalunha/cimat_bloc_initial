@@ -60,7 +60,7 @@ class UserRepositoryB4a implements UserRepository {
         errorTranslated,
         where: 'UserRepositoryB4a.register',
         originalError:
-            '${parseResponse.error!.code} -${parseResponse.error!.message}',
+            '${parseResponse.error!.code} - ${parseResponse.error!.message}',
       );
     }
   }

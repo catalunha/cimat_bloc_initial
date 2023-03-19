@@ -6,6 +6,7 @@ import 'app/core/authentication/bloc/authentication_bloc.dart';
 import 'app/view/home/home_page.dart';
 import 'app/view/splash/splash_page.dart';
 import 'app/view/user/login/login_page.dart';
+import 'app/view/user/register/email/user_register_email.page.dart';
 
 class App extends StatefulWidget {
   const App({Key? key}) : super(key: key);
@@ -79,6 +80,7 @@ class _AppViewState extends State<AppView> {
       // onGenerateRoute: (_) => SplashPage.route(),
       routes: {
         '/': (_) => const SplashPage(),
+        '/register/email': (_) => const UserRegisterEmailPage(),
       },
       initialRoute: '/',
     );

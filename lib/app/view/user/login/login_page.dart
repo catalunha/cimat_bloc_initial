@@ -18,9 +18,6 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: const Text('Login'),
-      // ),
       body: BlocProvider(
         create: (context) => LoginBloc(
             userRepository: RepositoryProvider.of<UserRepositoryB4a>(context)),
@@ -39,20 +36,20 @@ class LoginView extends StatefulWidget {
 
 class _LoginViewState extends State<LoginView> {
   final _formKey = GlobalKey<FormState>();
-  final _emailTec = TextEditingController();
-  final _passwordTec = TextEditingController();
+  final _emailTEC = TextEditingController();
+  final _passwordTEC = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _emailTec.text = 'catalunha.mj@gmail.com';
-    _passwordTec.text = '123456';
+    _emailTEC.text = 'catalunha.mj@gmail.com';
+    _passwordTEC.text = '123456';
   }
 
   @override
   void dispose() {
-    _emailTec.dispose();
-    _passwordTec.dispose();
+    _emailTEC.dispose();
+    _passwordTEC.dispose();
     super.dispose();
   }
 
@@ -103,7 +100,7 @@ class _LoginViewState extends State<LoginView> {
                             ),
                             AppTextFormField(
                               label: 'Informe o e-mail cadastrado',
-                              controller: _emailTec,
+                              controller: _emailTEC,
                               validator: Validatorless.multiple([
                                 Validatorless.required('email obrigatório.'),
                                 Validatorless.email('Email inválido.'),
@@ -114,7 +111,7 @@ class _LoginViewState extends State<LoginView> {
                             ),
                             AppTextFormField(
                               label: 'Informe a senha cadastrada',
-                              controller: _passwordTec,
+                              controller: _passwordTEC,
                               obscureText: true,
                               validator: Validatorless.multiple(
                                 [
@@ -141,8 +138,8 @@ class _LoginViewState extends State<LoginView> {
                                       if (formValid) {
                                         context.read<LoginBloc>().add(
                                               LoginEventFormSubmitted(
-                                                username: _emailTec.text,
-                                                password: _passwordTec.text,
+                                                username: _emailTEC.text,
+                                                password: _passwordTEC.text,
                                               ),
                                             );
                                       }
@@ -187,7 +184,8 @@ class _LoginViewState extends State<LoginView> {
                                 const Text('Não possui uma conta ?'),
                                 TextButton(
                                   onPressed: () {
-                                    // Get.toNamed(Routes.userRegisterEmail);
+                                    Navigator.of(context)
+                                        .pushNamed('/register/email');
                                   },
                                   child: const Text(
                                     'CADASTRE-SE.',
