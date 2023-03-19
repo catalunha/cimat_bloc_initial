@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:cimat_bloc/app/core/models/user_model.dart';
+import 'package:cimat_bloc/app/data/b4a/b4a_exception.dart';
 
 import '../../../../data/repositories/user_repository.dart';
 
@@ -22,12 +23,29 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     try {
       UserModel? user = await _userRepository.login(
           email: event.username, password: event.password);
+
       if (user != null) {
-        emit(state.copyWith(status: LoginStateStatus.success, user: user));
+        if (user.userProfile!.isActive == true) {
+          emit(state.copyWith(status: LoginStateStatus.success, user: user));
+        } else {
+          emit(state.copyWith(
+              status: LoginStateStatus.error,
+              user: null,
+              error: 'Sua conta ainda esta em análise'));
+        }
       }
-    } catch (_) {
+    } on B4aException catch (e) {
+      print(e);
       emit(state.copyWith(
-          status: LoginStateStatus.error, user: null, error: 'Falha no login'));
+          status: LoginStateStatus.error,
+          user: null,
+          error: '${e.message} (${e.where} -> ${e.originalError}'));
+    } catch (e) {
+      print(e);
+      emit(state.copyWith(
+          status: LoginStateStatus.error,
+          user: null,
+          error: 'Erro desconhecido no login'));
     }
   }
 }

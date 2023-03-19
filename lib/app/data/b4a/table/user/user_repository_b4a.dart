@@ -5,21 +5,12 @@ import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import '../../../../core/models/user_model.dart';
 import '../../../../core/models/user_profile_model.dart';
 import '../../../repositories/user_repository.dart';
+import '../../b4a_exception.dart';
 import '../../entity/user_entity.dart';
 import '../../utils/parse_error_code.dart';
 import '../user_profile/user_profile_repository_b4a.dart';
-import 'user_repository_exception.dart';
 
 class UserRepositoryB4a implements UserRepository {
-  // final _controller = StreamController<AuthenticationStatus>();
-  // @override
-  // Stream<AuthenticationStatus> get status async* {
-  //   print(' get status....');
-  //   await Future<void>.delayed(const Duration(seconds: 1));
-  //   yield AuthenticationStatus.unauthenticated;
-  //   yield* _controller.stream;
-  // }
-
   @override
   Future<UserModel?> readByEmail(String email) async {
     QueryBuilder<ParseObject> query =
@@ -36,10 +27,13 @@ class UserRepositoryB4a implements UserRepository {
         throw Exception();
       }
     } catch (e) {
-      var errorCodes = ParseErrorCode(parseResponse!.error!);
-      throw UserRepositoryException(
-        code: errorCodes.code,
-        message: errorCodes.message,
+      var errorTranslated =
+          ParseErrorTranslate.translate(parseResponse!.error!);
+      throw B4aException(
+        errorTranslated,
+        where: 'UserRepositoryB4a.readByEmail',
+        originalError:
+            '${parseResponse.error!.code} -${parseResponse.error!.message}',
       );
     }
   }
@@ -60,10 +54,13 @@ class UserRepositoryB4a implements UserRepository {
         throw Exception();
       }
     } catch (e) {
-      var errorCodes = ParseErrorCode(parseResponse!.error!);
-      throw UserRepositoryException(
-        code: errorCodes.code,
-        message: errorCodes.message,
+      var errorTranslated =
+          ParseErrorTranslate.translate(parseResponse!.error!);
+      throw B4aException(
+        errorTranslated,
+        where: 'UserRepositoryB4a.register',
+        originalError:
+            '${parseResponse.error!.code} -${parseResponse.error!.message}',
       );
     }
   }
@@ -78,7 +75,6 @@ class UserRepositoryB4a implements UserRepository {
 
       parseResponse = await user.login();
       if (parseResponse.success) {
-        // _controller.add(AuthenticationStatus.authenticated);
         ParseUser parseUser = parseResponse.results!.first;
         var profileField = parseUser.get('userProfile');
         var profileRepositoryB4a = UserProfileRepositoryB4a();
@@ -91,13 +87,16 @@ class UserRepositoryB4a implements UserRepository {
         );
         return userModel;
       } else {
-        throw Exception();
+        throw Exception('error login');
       }
     } catch (e) {
-      var errorCodes = ParseErrorCode(parseResponse!.error!);
-      throw UserRepositoryException(
-        code: errorCodes.code,
-        message: errorCodes.message,
+      var errorTranslated =
+          ParseErrorTranslate.translate(parseResponse!.error!);
+      throw B4aException(
+        errorTranslated,
+        where: 'UserRepositoryB4a.login',
+        originalError:
+            '${parseResponse.error!.code} -${parseResponse.error!.message}',
       );
     }
   }
@@ -107,10 +106,12 @@ class UserRepositoryB4a implements UserRepository {
     final ParseUser user = ParseUser(null, null, email);
     final ParseResponse parseResponse = await user.requestPasswordReset();
     if (!parseResponse.success) {
-      var errorCodes = ParseErrorCode(parseResponse.error!);
-      throw UserRepositoryException(
-        code: errorCodes.code,
-        message: errorCodes.message,
+      var errorTranslated = ParseErrorTranslate.translate(parseResponse.error!);
+      throw B4aException(
+        errorTranslated,
+        where: 'UserRepositoryB4a.forgotPassword',
+        originalError:
+            '${parseResponse.error!.code} -${parseResponse.error!.message}',
       );
     }
   }
@@ -119,7 +120,6 @@ class UserRepositoryB4a implements UserRepository {
   Future<bool> logout() async {
     final user = await ParseUser.currentUser() as ParseUser;
     var parseResponse = await user.logout();
-    // _controller.add(AuthenticationStatus.unauthenticated);
     if (parseResponse.success) {
       return true;
     } else {
@@ -127,7 +127,6 @@ class UserRepositoryB4a implements UserRepository {
     }
   }
 
-  // void dispose() => _controller.close();
   @override
   Future<UserModel?> hasUserLogged() async {
     var parseUser = await ParseUser.currentUser() as ParseUser?;

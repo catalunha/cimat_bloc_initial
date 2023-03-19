@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'app/core/authentication/bloc/authentication_bloc.dart';
 import 'app/view/home/home_page.dart';
-import 'app/view/login/login_page.dart';
 import 'app/view/splash/splash_page.dart';
+import 'app/view/user/login/login_page.dart';
 
 class App extends StatefulWidget {
   const App({Key? key}) : super(key: key);
@@ -21,7 +21,6 @@ class _AppState extends State<App> {
   void initState() {
     super.initState();
     _userRepository = UserRepositoryB4a();
-    // initBack4app = InitBack4app();
   }
 
   @override
@@ -57,7 +56,10 @@ class _AppViewState extends State<AppView> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData.dark(useMaterial3: true),
       navigatorKey: _navigatorKey,
+
       builder: (context, child) {
         return BlocListener<AuthenticationBloc, AuthenticationState>(
           listener: (context, state) {

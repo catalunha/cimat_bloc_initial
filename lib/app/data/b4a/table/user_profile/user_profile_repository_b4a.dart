@@ -6,7 +6,6 @@ import '../../../utils/pagination.dart';
 import '../../b4a_exception.dart';
 import '../../entity/user_profile_entity.dart';
 import '../../utils/parse_error_code.dart';
-import 'user_profile_repository_exception.dart';
 
 class UserProfileRepositoryB4a implements UserProfileRepository {
   Future<QueryBuilder<ParseObject>> getQueryAll(
@@ -24,7 +23,6 @@ class UserProfileRepositoryB4a implements UserProfileRepository {
   ) async {
     QueryBuilder<ParseObject> query2;
     query2 = await getQueryAll(query, pagination);
-
     ParseResponse? response;
     try {
       response = await query2.query();
@@ -38,10 +36,11 @@ class UserProfileRepositoryB4a implements UserProfileRepository {
         return [];
       }
     } on Exception {
-      var errorCodes = ParseErrorCode(response!.error!);
-      throw UserProfileRepositoryException(
-        code: errorCodes.code,
-        message: errorCodes.message,
+      var errorTranslated = ParseErrorTranslate.translate(response!.error!);
+      throw B4aException(
+        errorTranslated,
+        where: 'UserProfileRepositoryB4a.list',
+        originalError: '${response.error!.code} -${response.error!.message}',
       );
     }
   }
@@ -83,10 +82,11 @@ class UserProfileRepositoryB4a implements UserProfileRepository {
         throw Exception();
       }
     } on Exception {
-      var errorCodes = ParseErrorCode(response!.error!);
-      throw UserProfileRepositoryException(
-        code: errorCodes.code,
-        message: errorCodes.message,
+      var errorTranslated = ParseErrorTranslate.translate(response!.error!);
+      throw B4aException(
+        errorTranslated,
+        where: 'UserProfileRepositoryB4a.update',
+        originalError: '${response.error!.code} -${response.error!.message}',
       );
     }
   }
@@ -109,10 +109,11 @@ class UserProfileRepositoryB4a implements UserProfileRepository {
         return null;
       }
     } on Exception {
-      var errorCodes = ParseErrorCode(response!.error!);
-      throw UserProfileRepositoryException(
-        code: errorCodes.code,
-        message: errorCodes.message,
+      var errorTranslated = ParseErrorTranslate.translate(response!.error!);
+      throw B4aException(
+        errorTranslated,
+        where: 'UserProfileRepositoryB4a.getByRegister',
+        originalError: '${response.error!.code} -${response.error!.message}',
       );
     }
   }
