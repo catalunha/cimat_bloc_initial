@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../core/authentication/bloc/authentication_bloc.dart';
-import '../../data/repositories/user_repository.dart';
+import '../../core/authentication/authentication.dart';
+import '../../data/b4a/table/user/user_repository_b4a.dart';
 import 'bloc/login_bloc.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
+
   static Route<void> route() {
     return MaterialPageRoute<void>(builder: (_) => const LoginPage());
   }
@@ -14,14 +15,16 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Login'),
-        ),
-        body: BlocProvider(
-          create: (context) => LoginBloc(
-              userRepository: RepositoryProvider.of<UserRepository>(context)),
-          child: const LoginView(),
-        ));
+      appBar: AppBar(
+        title: const Text('Login'),
+      ),
+      body: BlocProvider(
+        create: (context) => LoginBloc(
+            userRepository: RepositoryProvider.of<UserRepositoryB4a>(context)),
+        // child: Container(),
+        child: const LoginView(),
+      ),
+    );
   }
 }
 
@@ -36,6 +39,15 @@ class _LoginViewState extends State<LoginView> {
   final _formKey = GlobalKey<FormState>();
   final _usernameTEC = TextEditingController();
   final _passwordTEC = TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _usernameTEC.text = 'catalunha.mj@gmail.com';
+    _passwordTEC.text = '123456';
+  }
+
   @override
   void dispose() {
     _usernameTEC.dispose();

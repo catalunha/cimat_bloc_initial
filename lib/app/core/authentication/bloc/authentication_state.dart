@@ -1,19 +1,46 @@
 part of 'authentication_bloc.dart';
 
-enum AuthenticationStatus { unknown, authenticated, unauthenticated }
+enum AuthenticationStatus {
+  unknown,
+  authenticated,
+  unauthenticated,
+  databaseError
+}
 
 class AuthenticationState {
   final AuthenticationStatus status;
+  final String error;
   final UserModel? user;
-  const AuthenticationState._({
+  const AuthenticationState({
     this.status = AuthenticationStatus.unknown,
     this.user,
+    this.error = '',
   });
-  const AuthenticationState.unknown() : this._();
+  const AuthenticationState.unknown() : this();
   const AuthenticationState.authenticated(UserModel? user)
-      : this._(status: AuthenticationStatus.authenticated, user: user);
+      : this(
+          status: AuthenticationStatus.authenticated,
+          user: user,
+          error: '',
+        );
   const AuthenticationState.unauthenticated()
-      : this._(status: AuthenticationStatus.unauthenticated, user: null);
+      : this(
+          status: AuthenticationStatus.unauthenticated,
+          user: null,
+          error: '',
+        );
+
+  AuthenticationState copyWith({
+    AuthenticationStatus? status,
+    String? error,
+    UserModel? user,
+  }) {
+    return AuthenticationState(
+      status: status ?? this.status,
+      error: error ?? this.error,
+      user: user ?? this.user,
+    );
+  }
 
   @override
   bool operator ==(Object other) {
@@ -21,9 +48,10 @@ class AuthenticationState {
 
     return other is AuthenticationState &&
         other.status == status &&
+        other.error == error &&
         other.user == user;
   }
 
   @override
-  int get hashCode => status.hashCode ^ user.hashCode;
+  int get hashCode => status.hashCode ^ error.hashCode ^ user.hashCode;
 }

@@ -1,10 +1,9 @@
-import 'dart:developer';
-
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
 import '../../../../core/models/user_profile_model.dart';
 import '../../../repositories/user_profile_repository.dart';
 import '../../../utils/pagination.dart';
+import '../../b4a_exception.dart';
 import '../../entity/user_profile_entity.dart';
 import '../../utils/parse_error_code.dart';
 import 'user_profile_repository_exception.dart';
@@ -49,26 +48,22 @@ class UserProfileRepositoryB4a implements UserProfileRepository {
 
   @override
   Future<UserProfileModel?> readById(String id) async {
-    log('+++', name: 'UserProfileRepositoryB4a.readById');
     QueryBuilder<ParseObject> query =
         QueryBuilder<ParseObject>(ParseObject(UserProfileEntity.className));
     query.whereEqualTo('objectId', id);
-
     query.first();
-    ParseResponse? response;
     try {
-      response = await query.query();
+      var response = await query.query();
 
       if (response.success && response.results != null) {
         return UserProfileEntity().fromParse(response.results!.first);
-      } else {
-        // throw Exception();
       }
-    } on Exception {
-      var errorCodes = ParseErrorCode(response!.error!);
-      throw UserProfileRepositoryException(
-        code: errorCodes.code,
-        message: errorCodes.message,
+      throw Exception();
+    } catch (e) {
+      throw B4aException(
+        'Perfil do usuário não encontrado',
+        where: 'UserProfileRepositoryB4a.readById()',
+        originalError: e.toString(),
       );
     }
     return null;

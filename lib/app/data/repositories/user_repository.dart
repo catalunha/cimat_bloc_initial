@@ -2,6 +2,7 @@ import '../../core/models/user_model.dart';
 
 abstract class UserRepository {
   // Stream<AuthenticationStatus> get status;
+  Future<UserModel?> hasUserLogged();
   Future<UserModel?> readByEmail(String email);
   Future<UserModel?> register(
       {required String email, required String password});

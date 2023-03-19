@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
 import '../../../../core/models/user_model.dart';
+import '../../../../core/models/user_profile_model.dart';
 import '../../../repositories/user_repository.dart';
 import '../../entity/user_entity.dart';
 import '../../utils/parse_error_code.dart';
@@ -127,4 +128,44 @@ class UserRepositoryB4a implements UserRepository {
   }
 
   // void dispose() => _controller.close();
+  @override
+  Future<UserModel?> hasUserLogged() async {
+    var parseUser = await ParseUser.currentUser() as ParseUser?;
+    if (parseUser == null) {
+      return null;
+    }
+    //Checks whether the user's session token is valid
+    final ParseResponse? parseResponse =
+        await ParseUser.getCurrentUserFromServer(parseUser.sessionToken!);
+
+    if (parseResponse?.success == null || !parseResponse!.success) {
+      //Invalid session. Logout
+      await parseUser.logout();
+      return null;
+    } else {
+      try {
+        var profileModel = await updateUserProfile(parseUser);
+        UserModel userModel = UserModel(
+          id: parseUser.objectId!,
+          email: parseUser.emailAddress!,
+          userProfile: profileModel,
+        );
+        return userModel;
+      } catch (_) {
+        rethrow;
+      }
+    }
+  }
+
+  Future<UserProfileModel?> updateUserProfile(ParseUser parseUser) async {
+    try {
+      var profileField = parseUser.get('userProfile');
+      var profileRepositoryB4a = UserProfileRepositoryB4a();
+      var profileModel =
+          await profileRepositoryB4a.readById(profileField.objectId);
+      return profileModel;
+    } catch (_) {
+      rethrow;
+    }
+  }
 }

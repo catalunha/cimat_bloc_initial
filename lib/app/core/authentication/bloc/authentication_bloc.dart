@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:cimat_bloc/app/core/models/user_model.dart';
 
+import '../../../data/b4a/b4a_exception.dart';
 import '../../../data/b4a/init_back4app.dart';
 import '../../../data/repositories/user_repository.dart';
 
@@ -54,6 +55,7 @@ class AuthenticationBloc
   FutureOr<void> _onAuthenticationEventLogoutRequested(
       AuthenticationEventLogoutRequested event,
       Emitter<AuthenticationState> emit) async {
+    print('_onAuthenticationEventLogoutRequested');
     try {
       bool logout = await _userRepository.logout();
       if (logout) {
@@ -74,13 +76,34 @@ class AuthenticationBloc
 
   FutureOr<void> onAuthenticationEventReceiveUser(
       AuthenticationEventReceiveUser event, Emitter<AuthenticationState> emit) {
-    AuthenticationState.authenticated(event.user);
+    print('onAuthenticationEventReceiveUser');
+    emit(AuthenticationState.authenticated(event.user));
   }
 
   FutureOr<void> _onAuthenticationEventInitial(AuthenticationEventInitial event,
       Emitter<AuthenticationState> emit) async {
     InitBack4app initBack4app = InitBack4app();
-    await initBack4app.init();
-    return emit(const AuthenticationState.unauthenticated());
+    try {
+      bool initParse = await initBack4app.init();
+      if (initParse) {
+        final user = await _userRepository.hasUserLogged();
+        if (user != null) {
+          emit(AuthenticationState.authenticated(user));
+        } else {
+          await Future.delayed(const Duration(seconds: 2));
+          emit(const AuthenticationState.unauthenticated());
+        }
+      }
+    } on B4aException catch (e) {
+      print('+++ _onAuthenticationEventInitial');
+      print(e);
+      print('--- _onAuthenticationEventInitial');
+      emit(state.copyWith(
+          status: AuthenticationStatus.databaseError, error: e.toString()));
+    } catch (e) {
+      print(e);
+      emit(state.copyWith(
+          status: AuthenticationStatus.unauthenticated, error: 'Novo erro'));
+    }
   }
 }

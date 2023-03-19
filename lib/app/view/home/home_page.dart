@@ -23,7 +23,7 @@ class HomePage extends StatelessWidget {
             Builder(builder: (context) {
               return BlocSelector<AuthenticationBloc, AuthenticationState,
                       String>(
-                  selector: (state) => state.user!.id,
+                  selector: (state) => state.user?.id ?? '...',
                   builder: (context, id) => Text('id: $id'));
             }),
             ElevatedButton(
