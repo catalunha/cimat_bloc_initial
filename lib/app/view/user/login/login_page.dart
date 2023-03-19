@@ -137,8 +137,8 @@ class _LoginViewState extends State<LoginView> {
                                               false;
                                       if (formValid) {
                                         context.read<LoginBloc>().add(
-                                              LoginEventFormSubmitted(
-                                                username: _emailTEC.text,
+                                              LoginEventLoginSubmitted(
+                                                email: _emailTEC.text,
                                                 password: _passwordTEC.text,
                                               ),
                                             );
@@ -158,17 +158,23 @@ class _LoginViewState extends State<LoginView> {
                                 const Text('Esqueceu sua senha ?'),
                                 TextButton(
                                   onPressed: () {
-                                    // if (_emailTec.text.isNotEmpty) {
-                                    //   widget._loginController
-                                    //       .forgotPassword(_emailTec.text.trim());
-                                    // } else {
-                                    //   Get.snackbar(
-                                    //     'Oops',
-                                    //     'Digite email para prosseguir',
-                                    //     // backgroundColor: Colors.red,
-                                    //     margin: const EdgeInsets.all(10),
-                                    //   );
-                                    // }
+                                    if (_emailTEC.text.isNotEmpty) {
+                                      context.read<LoginBloc>().add(
+                                            LoginEventRequestPasswordReset(
+                                              email: _emailTEC.text,
+                                            ),
+                                          );
+                                      ScaffoldMessenger.of(context)
+                                        ..hideCurrentSnackBar()
+                                        ..showSnackBar(const SnackBar(
+                                            content: Text(
+                                                'Enviamos instruções para seu email.')));
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                        ..hideCurrentSnackBar()
+                                        ..showSnackBar(const SnackBar(
+                                            content: Text('Informe um email')));
+                                    }
                                   },
                                   child: const Text(
                                     'Criar uma nova.',

@@ -57,15 +57,13 @@ class UserProfileRepositoryB4a implements UserProfileRepository {
       if (response.success && response.results != null) {
         return UserProfileEntity().fromParse(response.results!.first);
       }
-      throw Exception();
-    } catch (e) {
       throw B4aException(
-        'Perfil do usuário não encontrado',
+        'Perfil do usuário não encontrado.',
         where: 'UserProfileRepositoryB4a.readById()',
-        originalError: e.toString(),
       );
+    } catch (_) {
+      rethrow;
     }
-    return null;
   }
 
   @override

@@ -26,6 +26,17 @@ class HomePage extends StatelessWidget {
                   selector: (state) => state.user?.id ?? '...',
                   builder: (context, id) => Text('id: $id'));
             }),
+            BlocBuilder<AuthenticationBloc, AuthenticationState>(
+              builder: (context, state) {
+                return Column(
+                  children: [
+                    Text('id: ${state.user?.id}'),
+                    Text('email: ${state.user?.email}'),
+                    Text('email: ${state.user?.userProfile}'),
+                  ],
+                );
+              },
+            ),
             ElevatedButton(
                 onPressed: () {
                   context

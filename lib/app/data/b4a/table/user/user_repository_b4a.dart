@@ -76,40 +76,51 @@ class UserRepositoryB4a implements UserRepository {
       parseResponse = await user.login();
       if (parseResponse.success) {
         ParseUser parseUser = parseResponse.results!.first;
+
         var profileField = parseUser.get('userProfile');
         var profileRepositoryB4a = UserProfileRepositoryB4a();
-
-        userModel = UserModel(
-          id: parseUser.objectId!,
-          email: parseUser.emailAddress!,
-          userProfile:
-              await profileRepositoryB4a.readById(profileField.objectId),
+        UserProfileModel? userProfileModel =
+            await profileRepositoryB4a.readById(profileField.objectId);
+        if (userProfileModel != null) {
+          userModel = UserModel(
+            id: parseUser.objectId!,
+            email: parseUser.emailAddress!,
+            userProfile: userProfileModel,
+          );
+          return userModel;
+        }
+        var errorTranslated =
+            ParseErrorTranslate.translate(parseResponse.error!);
+        throw B4aException(
+          errorTranslated,
+          where: 'UserRepositoryB4a.login',
+          originalError:
+              '${parseResponse.error!.code} - ${parseResponse.error!.message}',
         );
-        return userModel;
       } else {
-        throw Exception('error login');
+        var errorTranslated =
+            ParseErrorTranslate.translate(parseResponse.error!);
+        throw B4aException(
+          errorTranslated,
+          where: 'UserRepositoryB4a.login',
+          originalError:
+              '${parseResponse.error!.code} - ${parseResponse.error!.message}',
+        );
       }
-    } catch (e) {
-      var errorTranslated =
-          ParseErrorTranslate.translate(parseResponse!.error!);
-      throw B4aException(
-        errorTranslated,
-        where: 'UserRepositoryB4a.login',
-        originalError:
-            '${parseResponse.error!.code} -${parseResponse.error!.message}',
-      );
+    } catch (_) {
+      rethrow;
     }
   }
 
   @override
-  Future<void> forgotPassword(String email) async {
+  Future<void> requestPasswordReset(String email) async {
     final ParseUser user = ParseUser(null, null, email);
     final ParseResponse parseResponse = await user.requestPasswordReset();
     if (!parseResponse.success) {
       var errorTranslated = ParseErrorTranslate.translate(parseResponse.error!);
       throw B4aException(
         errorTranslated,
-        where: 'UserRepositoryB4a.forgotPassword',
+        where: 'UserRepositoryB4a.requestPasswordReset',
         originalError:
             '${parseResponse.error!.code} -${parseResponse.error!.message}',
       );
@@ -143,13 +154,27 @@ class UserRepositoryB4a implements UserRepository {
       return null;
     } else {
       try {
-        var profileModel = await updateUserProfile(parseUser);
-        UserModel userModel = UserModel(
-          id: parseUser.objectId!,
-          email: parseUser.emailAddress!,
-          userProfile: profileModel,
+        var profileField = parseUser.get('userProfile');
+        var profileRepositoryB4a = UserProfileRepositoryB4a();
+
+        UserProfileModel? userProfileModel =
+            await profileRepositoryB4a.readById(profileField.objectId);
+        if (userProfileModel != null) {
+          UserModel userModel = UserModel(
+            id: parseUser.objectId!,
+            email: parseUser.emailAddress!,
+            userProfile: userProfileModel,
+          );
+          return userModel;
+        }
+        var errorTranslated =
+            ParseErrorTranslate.translate(parseResponse.error!);
+        throw B4aException(
+          errorTranslated,
+          where: 'UserRepositoryB4a.hasUserLogged',
+          originalError:
+              '${parseResponse.error!.code} - ${parseResponse.error!.message}',
         );
-        return userModel;
       } catch (_) {
         rethrow;
       }

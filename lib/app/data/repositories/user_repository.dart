@@ -8,5 +8,5 @@ abstract class UserRepository {
       {required String email, required String password});
   Future<UserModel?> login({required String email, required String password});
   Future<bool> logout();
-  Future<void> forgotPassword(String email);
+  Future<void> requestPasswordReset(String email);
 }

@@ -2,20 +2,36 @@ part of 'login_bloc.dart';
 
 abstract class LoginEvent {}
 
-class LoginEventFormSubmitted extends LoginEvent {
-  final String username;
+class LoginEventLoginSubmitted extends LoginEvent {
+  final String email;
   final String password;
-  LoginEventFormSubmitted({required this.username, required this.password});
+  LoginEventLoginSubmitted({required this.email, required this.password});
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is LoginEventFormSubmitted &&
-        other.username == username &&
+    return other is LoginEventLoginSubmitted &&
+        other.email == email &&
         other.password == password;
   }
 
   @override
-  int get hashCode => username.hashCode ^ password.hashCode;
+  int get hashCode => email.hashCode ^ password.hashCode;
+}
+
+class LoginEventRequestPasswordReset extends LoginEvent {
+  final String email;
+
+  LoginEventRequestPasswordReset({required this.email});
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is LoginEventRequestPasswordReset && other.email == email;
+  }
+
+  @override
+  int get hashCode => email.hashCode;
 }

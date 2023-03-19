@@ -105,8 +105,8 @@ class _LoginViewState extends State<LoginView> {
                               _formKey.currentState?.validate() ?? false;
                           if (validate) {
                             context.read<LoginBloc>().add(
-                                  LoginEventFormSubmitted(
-                                    username: _usernameTEC.text,
+                                  LoginEventLoginSubmitted(
+                                    email: _usernameTEC.text,
                                     password: _passwordTEC.text,
                                   ),
                                 );

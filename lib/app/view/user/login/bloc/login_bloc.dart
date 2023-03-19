@@ -14,15 +14,16 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc({required UserRepository userRepository})
       : _userRepository = userRepository,
         super(LoginState.initial()) {
-    on<LoginEventFormSubmitted>(_onLoginEventFormSubmitted);
+    on<LoginEventLoginSubmitted>(_onLoginEventFormSubmitted);
+    on<LoginEventRequestPasswordReset>(_onLoginEventRequestPasswordReset);
   }
 
   FutureOr<void> _onLoginEventFormSubmitted(
-      LoginEventFormSubmitted event, Emitter<LoginState> emit) async {
+      LoginEventLoginSubmitted event, Emitter<LoginState> emit) async {
     emit(state.copyWith(status: LoginStateStatus.loading));
     try {
       UserModel? user = await _userRepository.login(
-          email: event.username, password: event.password);
+          email: event.email, password: event.password);
 
       if (user != null) {
         if (user.userProfile!.isActive == true) {
@@ -31,7 +32,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           emit(state.copyWith(
               status: LoginStateStatus.error,
               user: null,
-              error: 'Sua conta ainda esta em análise'));
+              error: 'Sua conta ainda esta em análise.'));
         }
       }
     } on B4aException catch (e) {
@@ -39,13 +40,18 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       emit(state.copyWith(
           status: LoginStateStatus.error,
           user: null,
-          error: '${e.message} (${e.where} -> ${e.originalError}'));
+          error: '${e.message} (${e.where} -> ${e.originalError})'));
     } catch (e) {
       print(e);
       emit(state.copyWith(
           status: LoginStateStatus.error,
           user: null,
-          error: 'Erro desconhecido no login'));
+          error: 'Erro desconhecido no login.'));
     }
+  }
+
+  FutureOr<void> _onLoginEventRequestPasswordReset(
+      LoginEventRequestPasswordReset event, Emitter<LoginState> emit) async {
+    await _userRepository.requestPasswordReset(event.email);
   }
 }

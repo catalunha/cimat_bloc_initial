@@ -101,7 +101,8 @@ class AuthenticationBloc
     } catch (e) {
       print(e);
       emit(state.copyWith(
-          status: AuthenticationStatus.unauthenticated, error: 'Novo erro'));
+          status: AuthenticationStatus.unauthenticated,
+          error: 'Erro desconhecido na inicialização'));
     }
   }
 }
