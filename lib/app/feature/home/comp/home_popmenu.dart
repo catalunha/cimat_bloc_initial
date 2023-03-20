@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../core/authentication/authentication.dart';
-import '../../core/models/user_model.dart';
+import '../../../core/authentication/authentication.dart';
+import '../../../core/models/user_model.dart';
 
 class HomePopMenu extends StatelessWidget {
   const HomePopMenu({Key? key}) : super(key: key);

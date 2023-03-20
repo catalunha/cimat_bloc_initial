@@ -1,3 +1,4 @@
+import 'package:cimat_bloc/app/core/models/user_profile_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -9,6 +10,7 @@ import 'app/feature/home/home_page.dart';
 import 'app/feature/splash/splash_page.dart';
 import 'app/feature/user/login/login_page.dart';
 import 'app/feature/user/register/email/user_register_email.page.dart';
+import 'app/feature/userprofile/access/user_profile_access_page.dart';
 import 'app/feature/userprofile/edit/user_profile_edit_page.dart';
 
 class App extends StatefulWidget {
@@ -62,7 +64,6 @@ class _AppViewState extends State<AppView> {
       debugShowCheckedModeBanner: false,
       theme: ThemeData.dark(useMaterial3: true),
       navigatorKey: _navigatorKey,
-
       builder: (context, child) {
         return BlocListener<AuthenticationBloc, AuthenticationState>(
           listener: (context, state) {
@@ -79,11 +80,9 @@ class _AppViewState extends State<AppView> {
           child: child,
         );
       },
-      // onGenerateRoute: (_) => SplashPage.route(),
       routes: {
         '/': (_) => const SplashPage(),
         '/register/email': (_) => const UserRegisterEmailPage(),
-        // '/userProfile/edit': (_) => const UserProfileEditPage(),
 
         '/userProfile/edit': (context) {
           UserModel user =
@@ -91,6 +90,15 @@ class _AppViewState extends State<AppView> {
 
           return UserProfileEditPage(
             userModel: user,
+          );
+        },
+        // '/userProfile/edit': (_) => const UserProfileEditPage(),
+        '/userProfile/access': (context) {
+          UserProfileModel userProfileModel =
+              ModalRoute.of(context)!.settings.arguments as UserProfileModel;
+
+          return UserProfileAccessPage(
+            userProfileModel: userProfileModel,
           );
         },
       },

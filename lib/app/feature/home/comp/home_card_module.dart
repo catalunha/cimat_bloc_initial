@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../core/utils/allowed_access.dart';
+import '../../../core/utils/allowed_access.dart';
 
 class HomeCardModule extends StatelessWidget {
   final List<String> access;

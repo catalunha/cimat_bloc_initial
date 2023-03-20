@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/authentication/bloc/authentication_bloc.dart';
-import 'home_popmenu.dart';
+import '../../core/models/user_model.dart';
+import 'comp/home_card_module.dart';
+import 'comp/home_popmenu.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -28,16 +30,19 @@ class HomePage extends StatelessWidget {
       body: Center(
         child: SingleChildScrollView(
           child: Wrap(
-            children: const [
-              // CardHome(
-              //   title: 'Gerenciar usuários',
-              //   access: const ['admin'],
-              //   onAction: () {
-              //     Get.toNamed(Routes.userProfileSearch);
-              //   },
-              //   icon: Icons.people,
-              //   color: Colors.black87,
-              // ),
+            children: [
+              HomeCardModule(
+                title: 'Gerenciar usuários',
+                access: const ['admin'],
+                onAction: () {
+                  UserModel user =
+                      context.read<AuthenticationBloc>().state.user!;
+                  Navigator.of(context)
+                      .pushNamed('/userProfile/access', arguments: user);
+                },
+                icon: Icons.people,
+                color: Colors.black87,
+              ),
               // CardHome(
               //   title: 'Relatórios',
               //   access: const ['admin'],

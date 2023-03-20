@@ -14,7 +14,7 @@ class UserProfileModel {
   final String? photo;
   final List<String>? routes; //admin, reserva, operador, relatorio
   final List<String>? restrictions; // constar ItemModel.groups
-  final bool? isActive;
+  final bool isActive;
 
   UserProfileModel({
     required this.id,
@@ -27,7 +27,7 @@ class UserProfileModel {
     this.register,
     this.routes,
     this.restrictions,
-    this.isActive,
+    required this.isActive,
   });
 
   UserProfileModel copyWith({
@@ -87,9 +87,7 @@ class UserProfileModel {
     if (restrictions != null) {
       result.addAll({'restrictions': restrictions});
     }
-    if (isActive != null) {
-      result.addAll({'isActive': isActive});
-    }
+    result.addAll({'isActive': isActive});
 
     return result;
   }
