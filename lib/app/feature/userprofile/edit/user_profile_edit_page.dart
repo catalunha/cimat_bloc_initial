@@ -6,6 +6,9 @@ import 'package:validatorless/validatorless.dart';
 import 'package:cimat_bloc/app/core/authentication/authentication.dart';
 import 'package:cimat_bloc/app/core/models/user_model.dart';
 
+import '../../../core/repositories/user_profile_repository.dart';
+import '../../../data/b4a/table/user_profile/user_profile_b4a.dart';
+import '../../utils/app_import_image.dart';
 import '../../utils/app_textformfield.dart';
 import 'bloc/user_profile_edit_bloc.dart';
 /*
@@ -44,9 +47,16 @@ class UserProfileEditPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocProvider(
-        create: (context) => UserProfileEditBloc(userModel: userModel),
-        child: UserProfileEditView(userModel: userModel),
+      body: RepositoryProvider(
+        create: (context) =>
+            UserProfileRepository(userProfileB4a: UserProfileB4a()),
+        child: BlocProvider(
+          create: (context) => UserProfileEditBloc(
+              userModel: userModel,
+              userProfileRepository:
+                  RepositoryProvider.of<UserProfileRepository>(context)),
+          child: UserProfileEditView(userModel: userModel),
+        ),
       ),
     );
   }
@@ -103,12 +113,28 @@ class _UserProfileEditViewState extends State<UserProfileEditView> {
         },
       ),
       body: BlocListener<UserProfileEditBloc, UserProfileEditState>(
-        listener: (context, state) {
+        listener: (context, state) async {
+          if (state.status == UserProfileEditStateStatus.error) {
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(SnackBar(content: Text(state.error ?? '...')));
+          }
+          var contextNavigator = Navigator.of(context);
+          if (state.status == UserProfileEditStateStatus.loading) {
+            await showDialog(
+              barrierDismissible: false,
+              context: context,
+              builder: (BuildContext context) {
+                return const Center(child: CircularProgressIndicator());
+              },
+            );
+          }
           if (state.status == UserProfileEditStateStatus.success) {
+            contextNavigator.pop();
             context
                 .read<AuthenticationBloc>()
                 .add(AuthenticationEventUpdateUserProfile(state.user));
-            Navigator.of(context).pop();
+            contextNavigator.pop();
           }
         },
         child: Center(
@@ -155,16 +181,16 @@ class _UserProfileEditViewState extends State<UserProfileEditView> {
                             Validatorless.required('Telefone é obrigatório'),
                           ])),
                       const SizedBox(height: 5),
-                      // AppImportImage(
-                      //   label:
-                      //       'Click aqui para buscar sua foto, apenas face. Padrão 3x4.',
-                      //   imageUrl:
-                      //       widget._userProfileController.userProfile!.photo,
-                      //   setXFile: (value) =>
-                      //       widget._userProfileController.xfile = value,
-                      //   maxHeightImage: 150,
-                      //   maxWidthImage: 100,
-                      // ),
+                      AppImportImage(
+                        label:
+                            'Click aqui para buscar sua foto, apenas face. Padrão 3x4.',
+                        imageUrl: widget.userModel.userProfile!.photo,
+                        setXFile: (value) => context
+                            .read<UserProfileEditBloc>()
+                            .add(UserProfileEditEventSendXFile(xfile: value)),
+                        maxHeightImage: 150,
+                        maxWidthImage: 100,
+                      ),
                       const SizedBox(height: 70),
                     ],
                   ),

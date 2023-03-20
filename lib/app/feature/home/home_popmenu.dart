@@ -21,8 +21,6 @@ class HomePopMenu extends StatelessWidget {
                 UserModel user = context.read<AuthenticationBloc>().state.user!;
                 Navigator.of(context)
                     .pushNamed('/userProfile/edit', arguments: user);
-                // Navigator.of(context).push(MaterialPageRoute<void>(
-                //     builder: (_) => const UserProfileEditPage()));
               },
               icon: const Icon(Icons.person_outline_outlined),
             ),

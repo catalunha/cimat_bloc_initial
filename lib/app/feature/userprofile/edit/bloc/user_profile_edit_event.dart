@@ -2,10 +2,10 @@ part of 'user_profile_edit_bloc.dart';
 
 abstract class UserProfileEditEvent {}
 
-class UserProfileEditEventInitial extends UserProfileEditEvent {
-  final UserModel user;
-  UserProfileEditEventInitial({
-    required this.user,
+class UserProfileEditEventSendXFile extends UserProfileEditEvent {
+  final XFile? xfile;
+  UserProfileEditEventSendXFile({
+    required this.xfile,
   });
 }
 
