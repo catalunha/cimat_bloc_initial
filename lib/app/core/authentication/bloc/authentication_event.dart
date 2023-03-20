@@ -4,17 +4,18 @@ abstract class AuthenticationEvent {
   const AuthenticationEvent();
 }
 
-class _AuthenticationEventStatusChanged extends AuthenticationEvent {
-  final AuthenticationStatus status;
-  const _AuthenticationEventStatusChanged(this.status);
-}
-
 class AuthenticationEventLogoutRequested extends AuthenticationEvent {}
 
 class AuthenticationEventInitial extends AuthenticationEvent {}
 
-class AuthenticationEventReceiveUser extends AuthenticationEvent {
+class AuthenticationEventLoginRequested extends AuthenticationEvent {
   final UserModel? user;
 
-  AuthenticationEventReceiveUser(this.user);
+  AuthenticationEventLoginRequested(this.user);
+}
+
+class AuthenticationEventUpdateUserProfile extends AuthenticationEvent {
+  final UserModel? user;
+
+  AuthenticationEventUpdateUserProfile(this.user);
 }

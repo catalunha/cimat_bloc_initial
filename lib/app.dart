@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'app/core/authentication/bloc/authentication_bloc.dart';
+import 'app/core/models/user_model.dart';
 import 'app/core/repositories/user_repository.dart';
 import 'app/data/b4a/table/user/user_b4a.dart';
 import 'app/feature/home/home_page.dart';
 import 'app/feature/splash/splash_page.dart';
 import 'app/feature/user/login/login_page.dart';
 import 'app/feature/user/register/email/user_register_email.page.dart';
+import 'app/feature/userprofile/edit/user_profile_edit_page.dart';
 
 class App extends StatefulWidget {
   const App({Key? key}) : super(key: key);
@@ -81,6 +83,16 @@ class _AppViewState extends State<AppView> {
       routes: {
         '/': (_) => const SplashPage(),
         '/register/email': (_) => const UserRegisterEmailPage(),
+        // '/userProfile/edit': (_) => const UserProfileEditPage(),
+
+        '/userProfile/edit': (context) {
+          UserModel user =
+              ModalRoute.of(context)!.settings.arguments as UserModel;
+
+          return UserProfileEditPage(
+            userModel: user,
+          );
+        },
       },
       initialRoute: '/',
     );

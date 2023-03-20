@@ -18,39 +18,12 @@ class AuthenticationBloc
         super(const AuthenticationState.unknown()) {
     // on<_AuthenticationEventStatusChanged>(_onAuthenticationEventStatusChanged);
     on<AuthenticationEventInitial>(_onAuthenticationEventInitial);
-    on<AuthenticationEventReceiveUser>(onAuthenticationEventReceiveUser);
+    on<AuthenticationEventLoginRequested>(_onAuthenticationEventLoginRequested);
     on<AuthenticationEventLogoutRequested>(
         _onAuthenticationEventLogoutRequested);
-    // _authenticationStatusSubscription = _userRepository.status.listen(
-    //   (status) => add(_AuthenticationEventStatusChanged(status)),
-    // );
+    on<AuthenticationEventUpdateUserProfile>(
+        _onAuthenticationEventUpdateUserProfile);
   }
-  // late StreamSubscription<AuthenticationStatus>
-  //     _authenticationStatusSubscription;
-
-  // FutureOr<void> _onAuthenticationEventStatusChanged(
-  //     _AuthenticationEventStatusChanged event,
-  //     Emitter<AuthenticationState> emit) async {
-  //   if (event.status == AuthenticationStatus.unauthenticated) {
-  //     return emit(const AuthenticationState.unauthenticated());
-  //   } else if (event.status == AuthenticationStatus.authenticated) {
-  //     return emit(const AuthenticationState.authenticated());
-
-  //     // final user = await _tryGetUser();
-  //     // return emit(user != null
-  //     //     ? AuthenticationState.authenticated(user)
-  //     //     : const AuthenticationState.unauthenticated());
-  //   } else {}
-  // }
-
-  // Future<User?> _tryGetUser() async {
-  //   try {
-  //     final user = await _userRepository.getUser();
-  //     return user;
-  //   } catch (_) {
-  //     return null;
-  //   }
-  // }
 
   FutureOr<void> _onAuthenticationEventLogoutRequested(
       AuthenticationEventLogoutRequested event,
@@ -66,14 +39,9 @@ class AuthenticationBloc
     }
   }
 
-  // @override
-  // Future<void> close() {
-  //   // _authenticationStatusSubscription.cancel();
-  //   return super.close();
-  // }
-
-  FutureOr<void> onAuthenticationEventReceiveUser(
-      AuthenticationEventReceiveUser event, Emitter<AuthenticationState> emit) {
+  FutureOr<void> _onAuthenticationEventLoginRequested(
+      AuthenticationEventLoginRequested event,
+      Emitter<AuthenticationState> emit) {
     print('onAuthenticationEventReceiveUser');
     emit(AuthenticationState.authenticated(event.user));
   }
@@ -104,5 +72,11 @@ class AuthenticationBloc
           status: AuthenticationStatus.unauthenticated,
           error: 'Erro desconhecido na inicialização'));
     }
+  }
+
+  FutureOr<void> _onAuthenticationEventUpdateUserProfile(
+      AuthenticationEventUpdateUserProfile event,
+      Emitter<AuthenticationState> emit) {
+    emit(state.copyWith(user: event.user));
   }
 }

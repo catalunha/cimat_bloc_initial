@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/authentication/authentication.dart';
+import '../../core/models/user_model.dart';
 
 class HomePopMenu extends StatelessWidget {
   const HomePopMenu({Key? key}) : super(key: key);
@@ -17,8 +18,11 @@ class HomePopMenu extends StatelessWidget {
             child: TextButton.icon(
               label: const Text('Editar perfil'),
               onPressed: () {
-                // Get.back();
-                // Get.toNamed(Routes.userProfileEdit);
+                UserModel user = context.read<AuthenticationBloc>().state.user!;
+                Navigator.of(context)
+                    .pushNamed('/userProfile/edit', arguments: user);
+                // Navigator.of(context).push(MaterialPageRoute<void>(
+                //     builder: (_) => const UserProfileEditPage()));
               },
               icon: const Icon(Icons.person_outline_outlined),
             ),

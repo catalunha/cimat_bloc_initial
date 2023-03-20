@@ -77,9 +77,8 @@ class _LoginViewState extends State<LoginView> {
                                 SnackBar(content: Text(state.error ?? '...')));
                         }
                         if (state.status == LoginStateStatus.success) {
-                          context
-                              .read<AuthenticationBloc>()
-                              .add(AuthenticationEventReceiveUser(state.user));
+                          context.read<AuthenticationBloc>().add(
+                              AuthenticationEventLoginRequested(state.user));
                         }
                       },
                       child: Form(
