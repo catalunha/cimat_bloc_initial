@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:validatorless/validatorless.dart';
 
-import '../../../../data/b4a/table/user/user_repository_b4a.dart';
+import '../../../../core/repositories/user_repository.dart';
 import '../../../utils/app_button.dart';
 import '../../../utils/app_textformfield.dart';
 import 'bloc/user_register_email_bloc.dart';
@@ -15,7 +15,7 @@ class UserRegisterEmailPage extends StatelessWidget {
     return Scaffold(
       body: BlocProvider(
         create: (context) => UserRegisterEmailBloc(
-            userRepository: RepositoryProvider.of<UserRepositoryB4a>(context)),
+            userRepository: RepositoryProvider.of<UserRepository>(context)),
         child: const UserRegisterEmailView(),
       ),
     );

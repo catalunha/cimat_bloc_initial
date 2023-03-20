@@ -1,13 +1,12 @@
 import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 
 import '../../../../core/models/user_profile_model.dart';
-import '../../../repositories/user_profile_repository.dart';
 import '../../../utils/pagination.dart';
 import '../../b4a_exception.dart';
 import '../../entity/user_profile_entity.dart';
-import '../../utils/parse_error_code.dart';
+import '../../utils/parse_error_translate.dart';
 
-class UserProfileRepositoryB4a implements UserProfileRepository {
+class UserProfileB4a {
   Future<QueryBuilder<ParseObject>> getQueryAll(
       QueryBuilder<ParseObject> query, Pagination pagination) async {
     query.setAmountToSkip((pagination.page - 1) * pagination.limit);
@@ -16,7 +15,6 @@ class UserProfileRepositoryB4a implements UserProfileRepository {
     return query;
   }
 
-  @override
   Future<List<UserProfileModel>> list(
     QueryBuilder<ParseObject> query,
     Pagination pagination,
@@ -45,7 +43,6 @@ class UserProfileRepositoryB4a implements UserProfileRepository {
     }
   }
 
-  @override
   Future<UserProfileModel?> readById(String id) async {
     QueryBuilder<ParseObject> query =
         QueryBuilder<ParseObject>(ParseObject(UserProfileEntity.className));
@@ -66,9 +63,9 @@ class UserProfileRepositoryB4a implements UserProfileRepository {
     }
   }
 
-  @override
-  Future<String> update(UserProfileModel profileModel) async {
-    final userProfileParse = await UserProfileEntity().toParse(profileModel);
+  Future<String> update(UserProfileModel userProfileModel) async {
+    final userProfileParse =
+        await UserProfileEntity().toParse(userProfileModel);
     ParseResponse? response;
     try {
       response = await userProfileParse.save();
@@ -89,8 +86,7 @@ class UserProfileRepositoryB4a implements UserProfileRepository {
     }
   }
 
-  @override
-  Future<UserProfileModel?> getByRegister(String? value) async {
+  Future<UserProfileModel?> readByRegister(String? value) async {
     QueryBuilder<ParseObject> query =
         QueryBuilder<ParseObject>(ParseObject(UserProfileEntity.className));
     query.whereEqualTo('register', value);

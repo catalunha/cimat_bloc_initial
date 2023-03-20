@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:validatorless/validatorless.dart';
 
 import '../../../core/authentication/authentication.dart';
-import '../../../data/b4a/table/user/user_repository_b4a.dart';
+import '../../../core/repositories/user_repository.dart';
 import '../../utils/app_button.dart';
 import '../../utils/app_textformfield.dart';
 import 'bloc/login_bloc.dart';
@@ -20,7 +20,7 @@ class LoginPage extends StatelessWidget {
     return Scaffold(
       body: BlocProvider(
         create: (context) => LoginBloc(
-            userRepository: RepositoryProvider.of<UserRepositoryB4a>(context)),
+            userRepository: RepositoryProvider.of<UserRepository>(context)),
         child: const LoginView(),
       ),
     );

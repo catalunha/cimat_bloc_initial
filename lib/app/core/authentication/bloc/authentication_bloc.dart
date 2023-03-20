@@ -5,7 +5,7 @@ import 'package:cimat_bloc/app/core/models/user_model.dart';
 
 import '../../../data/b4a/b4a_exception.dart';
 import '../../../data/b4a/init_back4app.dart';
-import '../../../data/repositories/user_repository.dart';
+import '../../repositories/user_repository.dart';
 
 part 'authentication_event.dart';
 part 'authentication_state.dart';
@@ -95,10 +95,10 @@ class AuthenticationBloc
     } on B4aException catch (e) {
       print('+++ _onAuthenticationEventInitial');
       print(e);
-      print('--- _onAuthenticationEventInitial');
       emit(state.copyWith(
           status: AuthenticationStatus.databaseError, error: e.toString()));
     } catch (e) {
+      print('+++ _onAuthenticationEventInitial');
       print(e);
       emit(state.copyWith(
           status: AuthenticationStatus.unauthenticated,

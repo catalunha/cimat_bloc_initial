@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:cimat_bloc/app/core/models/user_model.dart';
 import 'package:cimat_bloc/app/data/b4a/b4a_exception.dart';
 
-import '../../../../data/repositories/user_repository.dart';
+import '../../../../core/repositories/user_repository.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';

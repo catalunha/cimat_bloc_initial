@@ -1,12 +1,13 @@
-import 'package:cimat_bloc/app/data/b4a/table/user/user_repository_b4a.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'app/core/authentication/bloc/authentication_bloc.dart';
-import 'app/view/home/home_page.dart';
-import 'app/view/splash/splash_page.dart';
-import 'app/view/user/login/login_page.dart';
-import 'app/view/user/register/email/user_register_email.page.dart';
+import 'app/core/repositories/user_repository.dart';
+import 'app/data/b4a/table/user/user_b4a.dart';
+import 'app/feature/home/home_page.dart';
+import 'app/feature/splash/splash_page.dart';
+import 'app/feature/user/login/login_page.dart';
+import 'app/feature/user/register/email/user_register_email.page.dart';
 
 class App extends StatefulWidget {
   const App({Key? key}) : super(key: key);
@@ -16,17 +17,16 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  late final UserRepositoryB4a _userRepository;
+  late final UserRepository _userRepository;
 
   @override
   void initState() {
     super.initState();
-    _userRepository = UserRepositoryB4a();
+    _userRepository = UserRepository(userB4a: UserB4a());
   }
 
   @override
   void dispose() {
-    // _userRepository.dispose();
     super.dispose();
   }
 

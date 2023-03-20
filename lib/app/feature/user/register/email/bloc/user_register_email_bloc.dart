@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 
 import '../../../../../core/models/user_model.dart';
 import '../../../../../data/b4a/b4a_exception.dart';
-import '../../../../../data/repositories/user_repository.dart';
+import '../../../../../core/repositories/user_repository.dart';
 
 part 'user_register_email_event.dart';
 part 'user_register_email_state.dart';

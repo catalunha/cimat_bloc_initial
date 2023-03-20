@@ -4,41 +4,12 @@ import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 
 import '../../../../core/models/user_model.dart';
 import '../../../../core/models/user_profile_model.dart';
-import '../../../repositories/user_repository.dart';
 import '../../b4a_exception.dart';
 import '../../entity/user_entity.dart';
-import '../../utils/parse_error_code.dart';
-import '../user_profile/user_profile_repository_b4a.dart';
+import '../../utils/parse_error_translate.dart';
+import '../user_profile/user_profile_b4a.dart';
 
-class UserRepositoryB4a implements UserRepository {
-  @override
-  Future<UserModel?> readByEmail(String email) async {
-    QueryBuilder<ParseObject> query =
-        QueryBuilder<ParseObject>(ParseObject(UserEntity.className));
-    query.whereEqualTo('email', email);
-    query.includeObject(['userProfile']);
-    query.first();
-    ParseResponse? parseResponse;
-    try {
-      parseResponse = await query.query();
-      if (parseResponse.success && parseResponse.results != null) {
-        return UserEntity().fromParse(parseResponse.results!.first);
-      } else {
-        throw Exception();
-      }
-    } catch (e) {
-      var errorTranslated =
-          ParseErrorTranslate.translate(parseResponse!.error!);
-      throw B4aException(
-        errorTranslated,
-        where: 'UserRepositoryB4a.readByEmail',
-        originalError:
-            '${parseResponse.error!.code} -${parseResponse.error!.message}',
-      );
-    }
-  }
-
-  @override
+class UserB4a {
   Future<UserModel?> register(
       {required String email, required String password}) async {
     ParseResponse? parseResponse;
@@ -65,7 +36,32 @@ class UserRepositoryB4a implements UserRepository {
     }
   }
 
-  @override
+  Future<UserModel?> readByEmail(String email) async {
+    QueryBuilder<ParseObject> query =
+        QueryBuilder<ParseObject>(ParseObject(UserEntity.className));
+    query.whereEqualTo('email', email);
+    query.includeObject(['userProfile']);
+    query.first();
+    ParseResponse? parseResponse;
+    try {
+      parseResponse = await query.query();
+      if (parseResponse.success && parseResponse.results != null) {
+        return UserEntity().fromParse(parseResponse.results!.first);
+      } else {
+        throw Exception();
+      }
+    } catch (e) {
+      var errorTranslated =
+          ParseErrorTranslate.translate(parseResponse!.error!);
+      throw B4aException(
+        errorTranslated,
+        where: 'UserRepositoryB4a.readByEmail',
+        originalError:
+            '${parseResponse.error!.code} -${parseResponse.error!.message}',
+      );
+    }
+  }
+
   Future<UserModel?> login(
       {required String email, required String password}) async {
     UserModel userModel;
@@ -77,10 +73,8 @@ class UserRepositoryB4a implements UserRepository {
       if (parseResponse.success) {
         ParseUser parseUser = parseResponse.results!.first;
 
-        var profileField = parseUser.get('userProfile');
-        var profileRepositoryB4a = UserProfileRepositoryB4a();
-        UserProfileModel? userProfileModel =
-            await profileRepositoryB4a.readById(profileField.objectId);
+        UserProfileModel? userProfileModel = await readUserProfile(parseUser);
+
         if (userProfileModel != null) {
           userModel = UserModel(
             id: parseUser.objectId!,
@@ -89,10 +83,8 @@ class UserRepositoryB4a implements UserRepository {
           );
           return userModel;
         }
-        var errorTranslated =
-            ParseErrorTranslate.translate(parseResponse.error!);
         throw B4aException(
-          errorTranslated,
+          'Perfil do usuário não encontrado.',
           where: 'UserRepositoryB4a.login',
           originalError:
               '${parseResponse.error!.code} - ${parseResponse.error!.message}',
@@ -112,7 +104,6 @@ class UserRepositoryB4a implements UserRepository {
     }
   }
 
-  @override
   Future<void> requestPasswordReset(String email) async {
     final ParseUser user = ParseUser(null, null, email);
     final ParseResponse parseResponse = await user.requestPasswordReset();
@@ -127,7 +118,6 @@ class UserRepositoryB4a implements UserRepository {
     }
   }
 
-  @override
   Future<bool> logout() async {
     final user = await ParseUser.currentUser() as ParseUser;
     var parseResponse = await user.logout();
@@ -138,7 +128,6 @@ class UserRepositoryB4a implements UserRepository {
     }
   }
 
-  @override
   Future<UserModel?> hasUserLogged() async {
     var parseUser = await ParseUser.currentUser() as ParseUser?;
     if (parseUser == null) {
@@ -154,11 +143,8 @@ class UserRepositoryB4a implements UserRepository {
       return null;
     } else {
       try {
-        var profileField = parseUser.get('userProfile');
-        var profileRepositoryB4a = UserProfileRepositoryB4a();
+        UserProfileModel? userProfileModel = await readUserProfile(parseUser);
 
-        UserProfileModel? userProfileModel =
-            await profileRepositoryB4a.readById(profileField.objectId);
         if (userProfileModel != null) {
           UserModel userModel = UserModel(
             id: parseUser.objectId!,
@@ -167,10 +153,9 @@ class UserRepositoryB4a implements UserRepository {
           );
           return userModel;
         }
-        var errorTranslated =
-            ParseErrorTranslate.translate(parseResponse.error!);
+
         throw B4aException(
-          errorTranslated,
+          'Perfil do usuário não encontrado.',
           where: 'UserRepositoryB4a.hasUserLogged',
           originalError:
               '${parseResponse.error!.code} - ${parseResponse.error!.message}',
@@ -181,10 +166,10 @@ class UserRepositoryB4a implements UserRepository {
     }
   }
 
-  Future<UserProfileModel?> updateUserProfile(ParseUser parseUser) async {
+  Future<UserProfileModel?> readUserProfile(ParseUser parseUser) async {
     try {
       var profileField = parseUser.get('userProfile');
-      var profileRepositoryB4a = UserProfileRepositoryB4a();
+      var profileRepositoryB4a = UserProfileB4a();
       var profileModel =
           await profileRepositoryB4a.readById(profileField.objectId);
       return profileModel;
