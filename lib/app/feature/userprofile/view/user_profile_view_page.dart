@@ -65,12 +65,12 @@ class UserProfileViewPage extends StatelessWidget {
                   inColumn: true,
                 ),
                 AppTextTitleValue(
-                  title: 'Rotas: ',
+                  title: 'Acessa como: ',
                   value: userProfileModel.routes?.join('\n'),
                   inColumn: true,
                 ),
                 AppTextTitleValue(
-                  title: 'Grupos restritos: ',
+                  title: 'Grupos com restrição: ',
                   value: userProfileModel.restrictions?.join('\n'),
                   inColumn: true,
                 ),

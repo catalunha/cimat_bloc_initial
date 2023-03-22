@@ -58,29 +58,32 @@ class _LoginViewState extends State<LoginView> {
     return Scaffold(
       body: LayoutBuilder(
         builder: (_, constrainsts) {
-          return Center(
-            child: SingleChildScrollView(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight: constrainsts.maxHeight,
-                  maxWidth: 400,
-                ),
-                child: IntrinsicHeight(
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: BlocListener<LoginBloc, LoginState>(
-                      listener: (context, state) {
-                        if (state.status == LoginStateStatus.error) {
-                          ScaffoldMessenger.of(context)
-                            ..hideCurrentSnackBar()
-                            ..showSnackBar(
-                                SnackBar(content: Text(state.error ?? '...')));
-                        }
-                        if (state.status == LoginStateStatus.success) {
-                          context.read<AuthenticationBloc>().add(
-                              AuthenticationEventLoginRequested(state.user));
-                        }
-                      },
+          return BlocListener<LoginBloc, LoginState>(
+            listenWhen: (previous, current) {
+              return previous.status != current.status;
+            },
+            listener: (context, state) {
+              if (state.status == LoginStateStatus.error) {
+                ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(SnackBar(content: Text(state.error ?? '...')));
+              }
+              if (state.status == LoginStateStatus.success) {
+                context
+                    .read<AuthenticationBloc>()
+                    .add(AuthenticationEventLoginRequested(state.user));
+              }
+            },
+            child: Center(
+              child: SingleChildScrollView(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: constrainsts.maxHeight,
+                    maxWidth: 400,
+                  ),
+                  child: IntrinsicHeight(
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
                       child: Form(
                         key: _formKey,
                         child: Column(

@@ -6,6 +6,7 @@ import '../../../core/repositories/user_profile_repository.dart';
 import '../../utils/app_icon.dart';
 import '../../utils/app_textformfield.dart';
 import 'bloc/user_profile_search_event.dart';
+import 'bloc/user_profile_search_state.dart';
 import 'user_profile_search_list_page.dart';
 
 class UserProfileSearchPage extends StatelessWidget {
@@ -38,12 +39,10 @@ class _SearchPageState extends State<UserProfileSearchView> {
   final _formKey = GlobalKey<FormState>();
   bool _nicknameContains = false;
   bool _nameContains = false;
-  bool _cpfEqualTo = false;
   bool _registerEqualTo = false;
   bool _phoneEqualTo = false;
   final _nicknameContainsTEC = TextEditingController();
   final _nameContainsTEC = TextEditingController();
-  final _cpfEqualToTEC = TextEditingController();
   final _registerEqualToTEC = TextEditingController();
   final _phoneEqualToTEC = TextEditingController();
 
@@ -51,7 +50,6 @@ class _SearchPageState extends State<UserProfileSearchView> {
   void initState() {
     _nicknameContainsTEC.text = '';
     _nameContainsTEC.text = '';
-    _cpfEqualToTEC.text = '';
     _registerEqualToTEC.text = '';
     _phoneEqualToTEC.text = '';
     super.initState();
@@ -63,141 +61,146 @@ class _SearchPageState extends State<UserProfileSearchView> {
       appBar: AppBar(
         title: const Text('Buscando usuário'),
       ),
-      body: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 400),
-          child: SingleChildScrollView(
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  Card(
-                    child: Column(
-                      children: [
-                        const Text('por Nome em tropa'),
-                        Row(
-                          children: [
-                            Checkbox(
-                              value: _nicknameContains,
-                              onChanged: (value) {
-                                setState(() {
-                                  _nicknameContains = value!;
-                                });
-                              },
-                            ),
-                            Expanded(
-                              child: AppTextFormField(
-                                label: 'que contém',
-                                controller: _nicknameContainsTEC,
+      body: BlocListener<UserProfileSearchBloc, UserProfileSearchState>(
+        listenWhen: (previous, current) {
+          return previous.status != current.status;
+        },
+        listener: (context, state) async {
+          print('++++++++++++++++ search -------------------');
+
+          if (state.status == UserProfileSearchStateStatus.error) {
+            Navigator.of(context).pop();
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(SnackBar(content: Text(state.error ?? '...')));
+          }
+          if (state.status == UserProfileSearchStateStatus.success) {
+            print('success');
+            Navigator.of(context).pop();
+          }
+          if (state.status == UserProfileSearchStateStatus.loading) {
+            print('loading');
+
+            await showDialog(
+              barrierDismissible: false,
+              context: context,
+              builder: (BuildContext context) {
+                return const Center(child: CircularProgressIndicator());
+              },
+            );
+          }
+        },
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 400),
+            child: SingleChildScrollView(
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    Card(
+                      child: Column(
+                        children: [
+                          const Text('por Nome em tropa'),
+                          Row(
+                            children: [
+                              Checkbox(
+                                value: _nicknameContains,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _nicknameContains = value!;
+                                  });
+                                },
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  Card(
-                    child: Column(
-                      children: [
-                        const Text('por Nome'),
-                        Row(
-                          children: [
-                            Checkbox(
-                              value: _nameContains,
-                              onChanged: (value) {
-                                setState(() {
-                                  _nameContains = value!;
-                                });
-                              },
-                            ),
-                            Expanded(
-                              child: AppTextFormField(
-                                label: 'que contém',
-                                controller: _nameContainsTEC,
+                              Expanded(
+                                child: AppTextFormField(
+                                  label: 'que contém',
+                                  controller: _nicknameContainsTEC,
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Card(
-                    child: Column(
-                      children: [
-                        const Text('por CPF'),
-                        Row(
-                          children: [
-                            Checkbox(
-                              value: _cpfEqualTo,
-                              onChanged: (value) {
-                                setState(() {
-                                  _cpfEqualTo = value!;
-                                });
-                              },
-                            ),
-                            Expanded(
-                              child: AppTextFormField(
-                                label: 'igual a',
-                                controller: _cpfEqualToTEC,
+                    Card(
+                      child: Column(
+                        children: [
+                          const Text('por Nome'),
+                          Row(
+                            children: [
+                              Checkbox(
+                                value: _nameContains,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _nameContains = value!;
+                                  });
+                                },
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  Card(
-                    child: Column(
-                      children: [
-                        const Text('por registro'),
-                        Row(
-                          children: [
-                            Checkbox(
-                              value: _registerEqualTo,
-                              onChanged: (value) {
-                                setState(() {
-                                  _registerEqualTo = value!;
-                                });
-                              },
-                            ),
-                            Expanded(
-                              child: AppTextFormField(
-                                label: 'igual a',
-                                controller: _registerEqualToTEC,
+                              Expanded(
+                                child: AppTextFormField(
+                                  label: 'que contém',
+                                  controller: _nameContainsTEC,
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Card(
-                    child: Column(
-                      children: [
-                        const Text('por Telefone'),
-                        Row(
-                          children: [
-                            Checkbox(
-                              value: _phoneEqualTo,
-                              onChanged: (value) {
-                                setState(() {
-                                  _phoneEqualTo = value!;
-                                });
-                              },
-                            ),
-                            Expanded(
-                              child: AppTextFormField(
-                                label: 'igual a',
-                                controller: _phoneEqualToTEC,
+                    Card(
+                      child: Column(
+                        children: [
+                          const Text('por registro'),
+                          Row(
+                            children: [
+                              Checkbox(
+                                value: _registerEqualTo,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _registerEqualTo = value!;
+                                  });
+                                },
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
+                              Expanded(
+                                child: AppTextFormField(
+                                  label: 'igual a',
+                                  controller: _registerEqualToTEC,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 70)
-                ],
+                    Card(
+                      child: Column(
+                        children: [
+                          const Text('por Telefone'),
+                          Row(
+                            children: [
+                              Checkbox(
+                                value: _phoneEqualTo,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _phoneEqualTo = value!;
+                                  });
+                                },
+                              ),
+                              Expanded(
+                                child: AppTextFormField(
+                                  label: 'igual a',
+                                  controller: _phoneEqualToTEC,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 70)
+                  ],
+                ),
               ),
             ),
           ),
@@ -227,7 +230,7 @@ class _SearchPageState extends State<UserProfileSearchView> {
               MaterialPageRoute(
                 builder: (_) => BlocProvider.value(
                   value: BlocProvider.of<UserProfileSearchBloc>(context),
-                  child: const UserProfileSearchListView(),
+                  child: const UserProfileSearchListPage(),
                 ),
               ),
             );

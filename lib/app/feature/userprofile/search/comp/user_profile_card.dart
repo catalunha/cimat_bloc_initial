@@ -22,13 +22,13 @@ class UserProfileCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8.0),
                       child: Image.network(
                         profile.photo!,
-                        height: 58,
-                        width: 58,
+                        height: 70,
+                        width: 70,
                       ),
                     )
                   : const SizedBox(
-                      height: 58,
-                      width: 58,
+                      height: 70,
+                      width: 70,
                       child: Icon(Icons.person_outline),
                     ),
               Expanded(
@@ -43,10 +43,10 @@ class UserProfileCard extends StatelessWidget {
                     //   title: 'Email: ',
                     //   value: profile.email,
                     // ),
-                    AppTextTitleValue(
-                      title: 'Nome: ',
-                      value: '${profile.name}',
-                    ),
+                    // AppTextTitleValue(
+                    //   title: 'Nome: ',
+                    //   value: '${profile.name}',
+                    // ),
                     AppTextTitleValue(
                       title: 'Nome em tropa: ',
                       value: '${profile.nickname}',

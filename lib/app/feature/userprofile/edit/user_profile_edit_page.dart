@@ -111,13 +111,23 @@ class _UserProfileEditViewState extends State<UserProfileEditView> {
         },
       ),
       body: BlocListener<UserProfileEditBloc, UserProfileEditState>(
+        listenWhen: (previous, current) {
+          return previous.status != current.status;
+        },
         listener: (context, state) async {
           if (state.status == UserProfileEditStateStatus.error) {
+            Navigator.of(context).pop();
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(SnackBar(content: Text(state.error ?? '...')));
           }
-          var contextNavigator = Navigator.of(context);
+          if (state.status == UserProfileEditStateStatus.success) {
+            Navigator.of(context).pop();
+            context
+                .read<AuthenticationBloc>()
+                .add(AuthenticationEventUpdateUserProfile(state.user));
+            Navigator.of(context).pop();
+          }
           if (state.status == UserProfileEditStateStatus.loading) {
             await showDialog(
               barrierDismissible: false,
@@ -126,13 +136,6 @@ class _UserProfileEditViewState extends State<UserProfileEditView> {
                 return const Center(child: CircularProgressIndicator());
               },
             );
-          }
-          if (state.status == UserProfileEditStateStatus.success) {
-            contextNavigator.pop();
-            context
-                .read<AuthenticationBloc>()
-                .add(AuthenticationEventUpdateUserProfile(state.user));
-            contextNavigator.pop();
           }
         },
         child: Center(

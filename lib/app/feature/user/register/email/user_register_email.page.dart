@@ -46,62 +46,58 @@ class _UserRegisterEmailViewState extends State<UserRegisterEmailView> {
     return Scaffold(
       body: LayoutBuilder(
         builder: (_, constrainsts) {
-          return Center(
-            child: SingleChildScrollView(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight: constrainsts.maxHeight,
-                  maxWidth: 400,
-                ),
-                child: IntrinsicHeight(
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: BlocListener<UserRegisterEmailBloc,
-                        UserRegisterEmailState>(
-                      listener: (context, state) async {
-                        if (state.status ==
-                            UserRegisterEmailStateStatus.error) {
-                          ScaffoldMessenger.of(context)
-                            ..hideCurrentSnackBar()
-                            ..showSnackBar(
-                                SnackBar(content: Text(state.error ?? '...')));
-                        }
-                        if (state.status ==
-                            UserRegisterEmailStateStatus.success) {
-                          var contextTemp = Navigator.of(context);
-                          await showDialog(
-                            barrierDismissible: false,
-                            context: context,
-                            builder: (BuildContext context) {
-                              return Center(
-                                child: Card(
-                                  color: Colors.green,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(20.0),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        const Text(
-                                            'Lembre-se de olhar seu email.'),
-                                        const Text(
-                                            'Para validar seu cadastro.'),
-                                        ElevatedButton(
-                                            onPressed: () {
-                                              Navigator.pop(context, true);
-                                            },
-                                            child: const Text('Entendi'))
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                          );
-                          contextTemp.pop();
-                        }
-                      },
+          return BlocListener<UserRegisterEmailBloc, UserRegisterEmailState>(
+            listenWhen: (previous, current) {
+              return previous.status != current.status;
+            },
+            listener: (context, state) async {
+              if (state.status == UserRegisterEmailStateStatus.error) {
+                ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(SnackBar(content: Text(state.error ?? '...')));
+              }
+              if (state.status == UserRegisterEmailStateStatus.success) {
+                var contextTemp = Navigator.of(context);
+                await showDialog(
+                  barrierDismissible: false,
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Center(
+                      child: Card(
+                        color: Colors.green,
+                        child: Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text('Lembre-se de olhar seu email.'),
+                              const Text('Para validar seu cadastro.'),
+                              ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.pop(context, true);
+                                  },
+                                  child: const Text('Entendi'))
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                );
+                contextTemp.pop();
+              }
+            },
+            child: Center(
+              child: SingleChildScrollView(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: constrainsts.maxHeight,
+                    maxWidth: 400,
+                  ),
+                  child: IntrinsicHeight(
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
                       child: Form(
                         key: _formKey,
                         child: Column(

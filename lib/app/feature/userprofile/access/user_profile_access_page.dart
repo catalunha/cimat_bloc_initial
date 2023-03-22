@@ -6,6 +6,8 @@ import '../../../core/repositories/user_profile_repository.dart';
 import '../../utils/app_photo_show.dart';
 import '../../utils/app_text_title_value.dart';
 import '../../utils/app_textformfield.dart';
+import '../search/bloc/user_profile_search_bloc.dart';
+import '../search/bloc/user_profile_search_event.dart';
 import 'bloc/user_profile_access_bloc.dart';
 import 'bloc/user_profile_access_event.dart';
 import 'bloc/user_profile_access_state.dart';
@@ -78,12 +80,32 @@ class _UserProfileAccessViewState extends State<UserProfileAccessView> {
         },
       ),
       body: BlocListener<UserProfileAccessBloc, UserProfileAccessState>(
-        listener: (context, state) {
-          if (state.status == UserProfileAccessStateStatus.success) {
-            // context
-            //     .read<UserProfileSearchBloc>()
-            //     .add(UserProfileSearchEventUpdateList(state.userProfileModel));
+        listenWhen: (previous, current) {
+          return previous.status != current.status;
+        },
+        listener: (context, state) async {
+          if (state.status == UserProfileAccessStateStatus.error) {
             Navigator.of(context).pop();
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(SnackBar(content: Text(state.error ?? '...')));
+          }
+
+          if (state.status == UserProfileAccessStateStatus.success) {
+            Navigator.of(context).pop();
+            context
+                .read<UserProfileSearchBloc>()
+                .add(UserProfileSearchEventUpdateList(state.userProfileModel));
+            Navigator.of(context).pop();
+          }
+          if (state.status == UserProfileAccessStateStatus.loading) {
+            await showDialog(
+              barrierDismissible: false,
+              context: context,
+              builder: (BuildContext context) {
+                return const Center(child: CircularProgressIndicator());
+              },
+            );
           }
         },
         child: Center(

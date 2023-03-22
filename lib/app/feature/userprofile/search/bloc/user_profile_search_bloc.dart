@@ -18,6 +18,7 @@ class UserProfileSearchBloc
       : _userProfileRepository = userProfileRepository,
         super(UserProfileSearchState.initial()) {
     on<UserProfileSearchEventNextPage>(_onUserProfileSearchEventNextPage);
+    on<UserProfileSearchEventUpdateList>(_onUserProfileSearchEventUpdateList);
     on<UserProfileSearchEventPreviousPage>(
         _onUserProfileSearchEventPreviousPage);
     on<UserProfileSearchEventFormSubmitted>(
@@ -79,7 +80,7 @@ class UserProfileSearchBloc
     if (userProfileModelListGet.isEmpty) {
       emit(state.copyWith(
         status: UserProfileSearchStateStatus.success,
-        firstPage: false,
+        // firstPage: false,
         lastPage: true,
       ));
     } else {
@@ -96,12 +97,16 @@ class UserProfileSearchBloc
       UserProfileSearchEventFormSubmitted event,
       Emitter<UserProfileSearchState> emit) async {
     emit(state.copyWith(
-        status: UserProfileSearchStateStatus.loading,
-        firstPage: true,
-        lastPage: false,
-        page: 1,
-        userProfileModelList: []));
+      status: UserProfileSearchStateStatus.loading,
+      firstPage: true,
+      lastPage: false,
+      page: 1,
+      userProfileModelList: [],
+      query:
+          QueryBuilder<ParseObject>(ParseObject(UserProfileEntity.className)),
+    ));
     try {
+      Future.delayed(const Duration(seconds: 2));
       QueryBuilder<ParseObject> query =
           QueryBuilder<ParseObject>(ParseObject(UserProfileEntity.className));
 
@@ -123,12 +128,11 @@ class UserProfileSearchBloc
         query,
         Pagination(page: state.page, limit: state.limit),
       );
-
-      emit(
-        state.copyWith(
-            status: UserProfileSearchStateStatus.success,
-            userProfileModelList: userProfileModelListGet),
-      );
+      emit(state.copyWith(
+        status: UserProfileSearchStateStatus.success,
+        userProfileModelList: userProfileModelListGet,
+        query: query,
+      ));
     } catch (_) {
       emit(
         state.copyWith(
@@ -136,5 +140,18 @@ class UserProfileSearchBloc
             error: 'Erro na montagem da busca'),
       );
     }
+  }
+
+  FutureOr<void> _onUserProfileSearchEventUpdateList(
+      UserProfileSearchEventUpdateList event,
+      Emitter<UserProfileSearchState> emit) {
+    int index = state.userProfileModelList
+        .indexWhere((model) => model.id == event.userProfileModel.id);
+    List<UserProfileModel> userProfileModelListTemp = [
+      ...state.userProfileModelList
+    ];
+    userProfileModelListTemp
+        .replaceRange(index, index + 1, [event.userProfileModel]);
+    emit(state.copyWith(userProfileModelList: userProfileModelListTemp));
   }
 }
