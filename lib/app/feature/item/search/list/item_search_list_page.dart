@@ -1,60 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../bloc/user_profile_search_bloc.dart';
-import '../bloc/user_profile_search_event.dart';
-import '../bloc/user_profile_search_state.dart';
-import 'comp/user_profile_list.dart';
+import '../bloc/item_search_bloc.dart';
+import '../bloc/item_search_event.dart';
+import '../bloc/item_search_state.dart';
+import 'comp/item_list.dart';
 
-class UserProfileSearchListPage extends StatelessWidget {
-  const UserProfileSearchListPage({
+class ItemSearchListPage extends StatelessWidget {
+  const ItemSearchListPage({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const UserProfileSearchListView();
+    return const ItemSearchListView();
   }
 }
 
-/*
-class UserProfileSearchListPage extends StatelessWidget {
-  const UserProfileSearchListPage({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: BlocProvider.value(
-        value: BlocProvider.of<UserProfileSearchBloc>(context),
-        child: const UserProfileSearchListView(),
-      ),
-    );
-    // return Scaffold(
-    //   body: RepositoryProvider.value(
-    //     value: (_) => RepositoryProvider.of<UserProfileRepository>(context),
-    //     child: BlocProvider.value(
-    //       value: BlocProvider.of<UserProfileSearchBloc>(context),
-    //       child: const UserProfileSearchListView(),
-    //     ),
-    //   ),
-    // );
-  }
-}
-*/
-class UserProfileSearchListView extends StatelessWidget {
-  const UserProfileSearchListView({Key? key}) : super(key: key);
+class ItemSearchListView extends StatelessWidget {
+  const ItemSearchListView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Usuários encontrados'),
+        title: const Text('Itens encontrados'),
         actions: [
           IconButton(
             onPressed: () {
-              // Get.to(() => UserProfilePrintPage());
+              // Get.to(() => ItemPrintPage());
             },
             icon: const Icon(Icons.print),
           )
@@ -65,15 +39,15 @@ class UserProfileSearchListView extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              BlocBuilder<UserProfileSearchBloc, UserProfileSearchState>(
+              BlocBuilder<ItemSearchBloc, ItemSearchState>(
                 builder: (context, state) {
                   return InkWell(
                     onTap: state.firstPage
                         ? null
                         : () {
                             context
-                                .read<UserProfileSearchBloc>()
-                                .add(UserProfileSearchEventPreviousPage());
+                                .read<ItemSearchBloc>()
+                                .add(ItemSearchEventPreviousPage());
                           },
                     child: Card(
                       color: state.firstPage ? Colors.black : Colors.black45,
@@ -89,14 +63,14 @@ class UserProfileSearchListView extends StatelessWidget {
                   );
                 },
               ),
-              BlocBuilder<UserProfileSearchBloc, UserProfileSearchState>(
+              BlocBuilder<ItemSearchBloc, ItemSearchState>(
                 builder: (context, state) {
                   return InkWell(
                     onTap: state.lastPage
                         ? null
                         : () {
                             context
-                                .read<UserProfileSearchBloc>()
+                                .read<ItemSearchBloc>()
                                 .add(UserProfileSearchEventNextPage());
                           },
                     child: Card(
@@ -118,10 +92,10 @@ class UserProfileSearchListView extends StatelessWidget {
           Expanded(
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 600),
-              child: BlocBuilder<UserProfileSearchBloc, UserProfileSearchState>(
+              child: BlocBuilder<ItemSearchBloc, ItemSearchState>(
                 builder: (context, state) {
-                  return UserProfileList(
-                    userProfileList: state.userProfileModelList,
+                  return ItemList(
+                    itemList: state.itemModelList,
                   );
                 },
               ),

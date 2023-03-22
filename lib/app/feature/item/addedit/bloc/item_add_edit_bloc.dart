@@ -13,22 +13,12 @@ class ItemAddEditBloc extends Bloc<ItemAddEditEvent, ItemAddEditState> {
       {required ItemModel? itemModel, required ItemRepository itemRepository})
       : _itemRepository = itemRepository,
         super(ItemAddEditState.initial(itemModel)) {
-    on<ItemAddEditEventImageSelected>(_onItemAddEditEventImageSelected);
     on<ItemAddEditEventFormSubmitted>(_onItemAddEditEventFormSubmitted);
-  }
-
-  FutureOr<void> _onItemAddEditEventImageSelected(
-      ItemAddEditEventImageSelected event, Emitter<ItemAddEditState> emit) {
-    emit(state.copyWith(imageModel: event.imageModel));
   }
 
   FutureOr<void> _onItemAddEditEventFormSubmitted(
       ItemAddEditEventFormSubmitted event,
       Emitter<ItemAddEditState> emit) async {
-    print('+++');
-    print(event.validate);
-    print(event.imageModel);
-    print('---');
     emit(state.copyWith(status: ItemAddEditStateStatus.loading));
     try {
       ItemModel itemModel;

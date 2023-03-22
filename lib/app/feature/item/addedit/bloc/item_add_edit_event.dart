@@ -2,13 +2,6 @@ import '../../../../core/models/image_model.dart';
 
 abstract class ItemAddEditEvent {}
 
-class ItemAddEditEventImageSelected extends ItemAddEditEvent {
-  final ImageModel? imageModel;
-  ItemAddEditEventImageSelected({
-    required this.imageModel,
-  });
-}
-
 class ItemAddEditEventFormSubmitted extends ItemAddEditEvent {
   final String? description;
   final String? serie;

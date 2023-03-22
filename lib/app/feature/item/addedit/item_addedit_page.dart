@@ -8,6 +8,8 @@ import '../../../core/models/item_model.dart';
 import '../../../core/repositories/item_repository.dart';
 import '../../utils/app_photo_show.dart';
 import '../../utils/app_textformfield.dart';
+import '../search/bloc/item_search_bloc.dart';
+import '../search/bloc/item_search_event.dart';
 import 'bloc/item_add_edit_bloc.dart';
 import 'bloc/item_add_edit_event.dart';
 import 'bloc/item_add_edit_state.dart';
@@ -127,9 +129,9 @@ class _ItemAddEditViewState extends State<ItemAddEditView> {
           }
           if (state.status == ItemAddEditStateStatus.success) {
             Navigator.of(context).pop();
-            // context
-            //     .read<ImageSearchBloc>()
-            //     .add(ImageSearchEventUpdateList(state.imageModel!));
+            context
+                .read<ItemSearchBloc>()
+                .add(ItemSearchEventUpdateList(state.itemModel!));
             Navigator.of(context).pop();
           }
           if (state.status == ItemAddEditStateStatus.loading) {

@@ -8,6 +8,7 @@ import 'app/data/b4a/table/user/user_b4a.dart';
 import 'app/feature/home/home_page.dart';
 import 'app/feature/image/search/image_search_page.dart';
 import 'app/feature/item/addedit/item_addedit_page.dart';
+import 'app/feature/item/search/item_search_page.dart';
 import 'app/feature/splash/splash_page.dart';
 import 'app/feature/user/login/login_page.dart';
 import 'app/feature/user/register/email/user_register_email.page.dart';
@@ -106,6 +107,7 @@ class _AppViewState extends State<AppView> {
         //   );
         // },
         '/item/addedit': (_) => const ItemAddEditPage(),
+        '/item/search': (_) => const ItemSearchPage(),
       },
       initialRoute: '/',
     );

@@ -64,15 +64,15 @@ class HomePage extends StatelessWidget {
                 icon: Icons.add,
                 color: Colors.black54,
               ),
-              // CardHome(
-              //   title: 'Buscar item',
-              //   access: const ['patrimonio'],
-              //   onAction: () {
-              //     Get.toNamed(Routes.itemSearch);
-              //   },
-              //   icon: Icons.content_paste_search,
-              //   color: Colors.black54,
-              // ),
+              HomeCardModule(
+                title: 'Buscar item',
+                access: const ['patrimonio'],
+                onAction: () {
+                  Navigator.of(context).pushNamed('/item/search');
+                },
+                icon: Icons.content_paste_search,
+                color: Colors.black54,
+              ),
               // CardHome(
               //   title: 'Entregar item',
               //   access: const ['reserva'],

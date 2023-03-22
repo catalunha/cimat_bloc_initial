@@ -106,7 +106,6 @@ class UserProfileSearchBloc
           QueryBuilder<ParseObject>(ParseObject(UserProfileEntity.className)),
     ));
     try {
-      Future.delayed(const Duration(seconds: 2));
       QueryBuilder<ParseObject> query =
           QueryBuilder<ParseObject>(ParseObject(UserProfileEntity.className));
 
