@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../../core/models/user_profile_model.dart';
-import '../../utils/app_photo_show.dart';
-import '../../utils/app_text_title_value.dart';
+import '../../../../../core/models/user_profile_model.dart';
+import '../../../../utils/app_photo_show.dart';
+import '../../../../utils/app_text_title_value.dart';
 
 class UserProfileViewPage extends StatelessWidget {
   final UserProfileModel userProfileModel;

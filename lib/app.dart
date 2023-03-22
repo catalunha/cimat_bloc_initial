@@ -1,4 +1,3 @@
-import 'package:cimat_bloc/app/core/models/user_profile_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -7,12 +6,12 @@ import 'app/core/models/user_model.dart';
 import 'app/core/repositories/user_repository.dart';
 import 'app/data/b4a/table/user/user_b4a.dart';
 import 'app/feature/home/home_page.dart';
+import 'app/feature/image/search/image_search_page.dart';
 import 'app/feature/splash/splash_page.dart';
 import 'app/feature/user/login/login_page.dart';
 import 'app/feature/user/register/email/user_register_email.page.dart';
 import 'app/feature/userprofile/edit/user_profile_edit_page.dart';
 import 'app/feature/userprofile/search/user_profile_search_page.dart';
-import 'app/feature/userprofile/view/user_profile_view_page.dart';
 
 class App extends StatefulWidget {
   const App({Key? key}) : super(key: key);
@@ -87,7 +86,6 @@ class _AppViewState extends State<AppView> {
       routes: {
         '/': (_) => const SplashPage(),
         '/register/email': (_) => const UserRegisterEmailPage(),
-
         '/userProfile/edit': (context) {
           UserModel user =
               ModalRoute.of(context)!.settings.arguments as UserModel;
@@ -96,30 +94,16 @@ class _AppViewState extends State<AppView> {
             userModel: user,
           );
         },
-        // '/userProfile/edit': (_) => const UserProfileEditPage(),
-        // '/userProfile/access': (context) {
-        //   UserProfileModel userProfileModel =
-        //       ModalRoute.of(context)!.settings.arguments as UserProfileModel;
+        '/userProfile/search': (_) => const UserProfileSearchPage(),
+        '/image/search': (_) => const ImageSearchPage(),
+        // '/image/addedit': (context) {
+        //   ImageModel? imageModel =
+        //       ModalRoute.of(context)!.settings.arguments as ImageModel?;
 
-        //   return UserProfileAccessPage(
-        //     userProfileModel: userProfileModel,
+        //   return ImageAddEditPage(
+        //     imageModel: imageModel,
         //   );
         // },
-        '/userProfile/search': (_) => const UserProfileSearchPage(),
-        // '/userProfile/list': (_) => const UserProfileSearchListPage(),
-        // '/userProfile/list': (_) {
-        //   return BlocProvider.value(
-        //       value: BlocProvider.of<UserProfileSearchBloc>(context),
-        //       child: const UserProfileSearchListView());
-        // },
-        '/userProfile/view': (context) {
-          UserProfileModel userProfileModel =
-              ModalRoute.of(context)!.settings.arguments as UserProfileModel;
-
-          return UserProfileViewPage(
-            userProfileModel: userProfileModel,
-          );
-        },
       },
       initialRoute: '/',
     );

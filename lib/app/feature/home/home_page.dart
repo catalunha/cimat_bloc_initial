@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/authentication/bloc/authentication_bloc.dart';
-import '../../core/models/user_model.dart';
 import 'comp/home_card_module.dart';
 import 'comp/home_popmenu.dart';
 
@@ -35,31 +34,27 @@ class HomePage extends StatelessWidget {
                 title: 'Gerenciar usuários',
                 access: const ['admin'],
                 onAction: () {
-                  UserModel user =
-                      context.read<AuthenticationBloc>().state.user!;
-                  Navigator.of(context)
-                      .pushNamed('/userProfile/search', arguments: user);
+                  Navigator.of(context).pushNamed('/userProfile/search');
                 },
                 icon: Icons.people,
                 color: Colors.black87,
               ),
-              // CardHome(
-              //   title: 'Relatórios',
-              //   access: const ['admin'],
-              //   onAction: () {
-              //   },
-              //   icon: Icons.print_rounded,
-              //   color: Colors.black87,
-              // ),
-              // CardHome(
-              //   title: 'Imagens de itens',
-              //   access: const ['patrimonio'],
-              //   onAction: () {
-              //     Get.toNamed(Routes.imageSearch);
-              //   },
-              //   icon: Icons.image,
-              //   color: Colors.black54,
-              // ),
+              HomeCardModule(
+                title: 'Relatórios',
+                access: const ['admin'],
+                onAction: () {},
+                icon: Icons.print_rounded,
+                color: Colors.black87,
+              ),
+              HomeCardModule(
+                title: 'Imagens de itens',
+                access: const ['patrimonio'],
+                onAction: () {
+                  Navigator.of(context).pushNamed('/image/search');
+                },
+                icon: Icons.image,
+                color: Colors.black54,
+              ),
               // CardHome(
               //   title: 'Adicionar item',
               //   access: const ['patrimonio'],

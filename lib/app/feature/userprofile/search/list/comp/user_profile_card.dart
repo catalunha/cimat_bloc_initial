@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/models/user_profile_model.dart';
-import '../../../utils/app_text_title_value.dart';
-import '../../access/user_profile_access_page.dart';
-import '../bloc/user_profile_search_bloc.dart';
+import '../../../../../core/models/user_profile_model.dart';
+import '../../../../utils/app_text_title_value.dart';
+import '../../../access/user_profile_access_page.dart';
+import '../../bloc/user_profile_search_bloc.dart';
+import '../view/user_profile_view_page.dart';
 
 class UserProfileCard extends StatelessWidget {
   final UserProfileModel profile;
@@ -68,7 +69,6 @@ class UserProfileCard extends StatelessWidget {
                             //     arguments: profile);
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                // settings: RouteSettings(arguments: profile),
                                 builder: (_) => BlocProvider.value(
                                   value: BlocProvider.of<UserProfileSearchBloc>(
                                       context),
@@ -84,9 +84,15 @@ class UserProfileCard extends StatelessWidget {
                         ),
                         IconButton(
                           onPressed: () {
-                            Navigator.of(context).pushNamed(
-                              '/userProfile/view',
-                              arguments: profile,
+                            // Navigator.of(context).pushNamed(
+                            //   '/userProfile/view',
+                            //   arguments: profile,
+                            // );
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => UserProfileViewPage(
+                                    userProfileModel: profile),
+                              ),
                             );
                           },
                           icon: const Icon(

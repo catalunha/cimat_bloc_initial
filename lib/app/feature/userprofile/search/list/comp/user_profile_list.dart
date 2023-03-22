@@ -1,7 +1,7 @@
-import 'package:cimat_bloc/app/feature/userprofile/search/comp/user_profile_card.dart';
+import 'package:cimat_bloc/app/feature/userprofile/search/list/comp/user_profile_card.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../core/models/user_profile_model.dart';
+import '../../../../../core/models/user_profile_model.dart';
 
 class UserProfileList extends StatelessWidget {
   final List<UserProfileModel> userProfileList;

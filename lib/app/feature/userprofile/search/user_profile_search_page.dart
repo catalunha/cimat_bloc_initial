@@ -7,7 +7,7 @@ import '../../utils/app_icon.dart';
 import '../../utils/app_textformfield.dart';
 import 'bloc/user_profile_search_event.dart';
 import 'bloc/user_profile_search_state.dart';
-import 'user_profile_search_list_page.dart';
+import 'list/user_profile_search_list_page.dart';
 
 class UserProfileSearchPage extends StatelessWidget {
   const UserProfileSearchPage({
