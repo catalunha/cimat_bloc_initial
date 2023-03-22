@@ -60,9 +60,7 @@ class UserProfileEntity {
     if (profileModel.restrictions != null) {
       profileParseObject.set('restrictions', profileModel.restrictions);
     }
-    if (profileModel.isActive != null) {
-      profileParseObject.set('isActive', profileModel.isActive);
-    }
+    profileParseObject.set('isActive', profileModel.isActive);
     return profileParseObject;
   }
 }

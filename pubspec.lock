@@ -324,10 +324,10 @@ packages:
     dependency: transitive
     description:
       name: parse_server_sdk
-      sha256: "6ac92ac63893b3813e2266ed1b3e468965a5f098dc2627a282000058aeb34dd9"
+      sha256: "4ecf022ec54b28770eeaebd387414b587a50f0ef5fd2c71b7736c891966fcecf"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.0"
+    version: "4.0.1"
   parse_server_sdk_flutter:
     dependency: "direct main"
     description:

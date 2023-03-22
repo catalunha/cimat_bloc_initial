@@ -7,7 +7,6 @@ import 'package:cimat_bloc/app/core/authentication/authentication.dart';
 import 'package:cimat_bloc/app/core/models/user_model.dart';
 
 import '../../../core/repositories/user_profile_repository.dart';
-import '../../../data/b4a/table/user_profile/user_profile_b4a.dart';
 import '../../utils/app_import_image.dart';
 import '../../utils/app_textformfield.dart';
 import 'bloc/user_profile_edit_bloc.dart';
@@ -48,8 +47,7 @@ class UserProfileEditPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: RepositoryProvider(
-        create: (context) =>
-            UserProfileRepository(userProfileB4a: UserProfileB4a()),
+        create: (context) => UserProfileRepository(),
         child: BlocProvider(
           create: (context) => UserProfileEditBloc(
               userModel: userModel,

@@ -10,8 +10,9 @@ import 'app/feature/home/home_page.dart';
 import 'app/feature/splash/splash_page.dart';
 import 'app/feature/user/login/login_page.dart';
 import 'app/feature/user/register/email/user_register_email.page.dart';
-import 'app/feature/userprofile/access/user_profile_access_page.dart';
 import 'app/feature/userprofile/edit/user_profile_edit_page.dart';
+import 'app/feature/userprofile/search/user_profile_search_page.dart';
+import 'app/feature/userprofile/view/user_profile_view_page.dart';
 
 class App extends StatefulWidget {
   const App({Key? key}) : super(key: key);
@@ -93,11 +94,26 @@ class _AppViewState extends State<AppView> {
           );
         },
         // '/userProfile/edit': (_) => const UserProfileEditPage(),
-        '/userProfile/access': (context) {
+        // '/userProfile/access': (context) {
+        //   UserProfileModel userProfileModel =
+        //       ModalRoute.of(context)!.settings.arguments as UserProfileModel;
+
+        //   return UserProfileAccessPage(
+        //     userProfileModel: userProfileModel,
+        //   );
+        // },
+        '/userProfile/search': (_) => const UserProfileSearchPage(),
+        // '/userProfile/list': (_) => const UserProfileSearchListPage(),
+        // '/userProfile/list': (_) {
+        //   return BlocProvider.value(
+        //       value: BlocProvider.of<UserProfileSearchBloc>(context),
+        //       child: const UserProfileSearchListView());
+        // },
+        '/userProfile/view': (context) {
           UserProfileModel userProfileModel =
               ModalRoute.of(context)!.settings.arguments as UserProfileModel;
 
-          return UserProfileAccessPage(
+          return UserProfileViewPage(
             userProfileModel: userProfileModel,
           );
         },

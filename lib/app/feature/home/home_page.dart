@@ -38,7 +38,7 @@ class HomePage extends StatelessWidget {
                   UserModel user =
                       context.read<AuthenticationBloc>().state.user!;
                   Navigator.of(context)
-                      .pushNamed('/userProfile/access', arguments: user);
+                      .pushNamed('/userProfile/search', arguments: user);
                 },
                 icon: Icons.people,
                 color: Colors.black87,
@@ -47,7 +47,6 @@ class HomePage extends StatelessWidget {
               //   title: 'Relatórios',
               //   access: const ['admin'],
               //   onAction: () {
-              //     // Get.toNamed(Routes.userProfileSearch);
               //   },
               //   icon: Icons.print_rounded,
               //   color: Colors.black87,

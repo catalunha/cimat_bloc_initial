@@ -5,9 +5,9 @@ import '../models/user_profile_model.dart';
 import '../../data/utils/pagination.dart';
 
 class UserProfileRepository {
-  final UserProfileB4a userProfileB4a;
+  final UserProfileB4a userProfileB4a = UserProfileB4a();
 
-  UserProfileRepository({required this.userProfileB4a});
+  UserProfileRepository();
   Future<List<UserProfileModel>> list(
     QueryBuilder<ParseObject> query,
     Pagination pagination,
