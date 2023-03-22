@@ -55,15 +55,15 @@ class HomePage extends StatelessWidget {
                 icon: Icons.image,
                 color: Colors.black54,
               ),
-              // CardHome(
-              //   title: 'Adicionar item',
-              //   access: const ['patrimonio'],
-              //   onAction: () {
-              //     Get.toNamed(Routes.itemAddEdit);
-              //   },
-              //   icon: Icons.add,
-              //   color: Colors.black54,
-              // ),
+              HomeCardModule(
+                title: 'Adicionar item',
+                access: const ['patrimonio'],
+                onAction: () {
+                  Navigator.of(context).pushNamed('/item/addedit');
+                },
+                icon: Icons.add,
+                color: Colors.black54,
+              ),
               // CardHome(
               //   title: 'Buscar item',
               //   access: const ['patrimonio'],

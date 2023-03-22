@@ -51,6 +51,7 @@ class ImageCard extends StatelessWidget {
               IconButton(
                 onPressed: () {
                   // Get.back(result: imageModel)
+                  Navigator.of(context).pop(imageModel);
                 },
                 icon: const Icon(
                   Icons.check,

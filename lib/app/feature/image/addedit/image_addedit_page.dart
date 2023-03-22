@@ -84,7 +84,6 @@ class _ImageAddEditViewState extends State<ImageAddEditView> {
             context
                 .read<ImageSearchBloc>()
                 .add(ImageSearchEventUpdateList(state.imageModel!));
-
             Navigator.of(context).pop();
           }
           if (state.status == ImageAddEditStateStatus.loading) {
