@@ -129,9 +129,11 @@ class _ItemAddEditViewState extends State<ItemAddEditView> {
           }
           if (state.status == ItemAddEditStateStatus.success) {
             Navigator.of(context).pop();
-            context
-                .read<ItemSearchBloc>()
-                .add(ItemSearchEventUpdateList(state.itemModel!));
+            if (widget.itemModel != null) {
+              context
+                  .read<ItemSearchBloc>()
+                  .add(ItemSearchEventUpdateList(state.itemModel!));
+            }
             Navigator.of(context).pop();
           }
           if (state.status == ItemAddEditStateStatus.loading) {

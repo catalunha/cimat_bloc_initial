@@ -8,8 +8,9 @@ import '../../bloc/user_profile_search_bloc.dart';
 import '../view/user_profile_view_page.dart';
 
 class UserProfileCard extends StatelessWidget {
-  final UserProfileModel profile;
-  const UserProfileCard({Key? key, required this.profile}) : super(key: key);
+  final UserProfileModel userProfile;
+  const UserProfileCard({Key? key, required this.userProfile})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,11 +19,11 @@ class UserProfileCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              profile.photo != null && profile.photo!.isNotEmpty
+              userProfile.photo != null && userProfile.photo!.isNotEmpty
                   ? ClipRRect(
                       borderRadius: BorderRadius.circular(8.0),
                       child: Image.network(
-                        profile.photo!,
+                        userProfile.photo!,
                         height: 70,
                         width: 70,
                       ),
@@ -38,27 +39,27 @@ class UserProfileCard extends StatelessWidget {
                   children: [
                     // AppTextTitleValue(
                     //   title: 'Id: ',
-                    //   value: profile.id,
+                    //   value: userProfile.id,
                     // ),
                     // AppTextTitleValue(
                     //   title: 'Email: ',
-                    //   value: profile.email,
+                    //   value: userProfile.email,
                     // ),
                     // AppTextTitleValue(
                     //   title: 'Nome: ',
-                    //   value: '${profile.name}',
+                    //   value: '${userProfile.name}',
                     // ),
                     AppTextTitleValue(
                       title: 'Nome em tropa: ',
-                      value: '${profile.nickname}',
+                      value: '${userProfile.nickname}',
                     ),
                     AppTextTitleValue(
                       title: 'Telefone: ',
-                      value: '${profile.phone}',
+                      value: '${userProfile.phone}',
                     ),
                     AppTextTitleValue(
                       title: 'Registro: ',
-                      value: '${profile.register}',
+                      value: '${userProfile.register}',
                     ),
                     Wrap(
                       children: [
@@ -66,14 +67,14 @@ class UserProfileCard extends StatelessWidget {
                           onPressed: () {
                             // Navigator.of(context).pushNamed(
                             //     '/userProfile/access',
-                            //     arguments: profile);
+                            //     arguments: userProfile);
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (_) => BlocProvider.value(
                                   value: BlocProvider.of<UserProfileSearchBloc>(
                                       context),
                                   child: UserProfileAccessPage(
-                                      userProfileModel: profile),
+                                      userProfileModel: userProfile),
                                 ),
                               ),
                             );
@@ -86,12 +87,12 @@ class UserProfileCard extends StatelessWidget {
                           onPressed: () {
                             // Navigator.of(context).pushNamed(
                             //   '/userProfile/view',
-                            //   arguments: profile,
+                            //   arguments: userProfile,
                             // );
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (_) => UserProfileViewPage(
-                                    userProfileModel: profile),
+                                    userProfileModel: userProfile),
                               ),
                             );
                           },

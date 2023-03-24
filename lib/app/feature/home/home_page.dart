@@ -73,15 +73,15 @@ class HomePage extends StatelessWidget {
                 icon: Icons.content_paste_search,
                 color: Colors.black54,
               ),
-              // CardHome(
-              //   title: 'Entregar item',
-              //   access: const ['reserva'],
-              //   onAction: () {
-              //     Get.toNamed(Routes.cautionDeliveryConsult);
-              //   },
-              //   icon: Icons.keyboard_tab,
-              //   color: Colors.black38,
-              // ),
+              HomeCardModule(
+                title: 'Entregar item',
+                access: const ['reserva'],
+                onAction: () {
+                  Navigator.of(context).pushNamed('/caution/delivery');
+                },
+                icon: Icons.keyboard_tab,
+                color: Colors.black38,
+              ),
               // CardHome(
               //   title: 'Receber item',
               //   access: const ['reserva'],

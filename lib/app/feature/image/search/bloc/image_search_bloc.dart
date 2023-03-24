@@ -99,7 +99,6 @@ class ImageSearchBloc extends Bloc<ImageSearchEvent, ImageSearchState> {
       query: QueryBuilder<ParseObject>(ParseObject(ImageEntity.className)),
     ));
     try {
-      Future.delayed(const Duration(seconds: 2));
       QueryBuilder<ParseObject> query =
           QueryBuilder<ParseObject>(ParseObject(ImageEntity.className));
 

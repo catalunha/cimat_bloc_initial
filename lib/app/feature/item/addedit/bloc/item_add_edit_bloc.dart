@@ -57,8 +57,11 @@ class ItemAddEditBloc extends Bloc<ItemAddEditEvent, ItemAddEditState> {
           image: event.imageModel,
         );
       }
+      String itemModelId = state.itemModel?.id ?? '';
+      for (var i = 0; i < event.quantity; i++) {
+        await _itemRepository.update(itemModel);
+      }
 
-      String itemModelId = await _itemRepository.update(itemModel);
       itemModel = itemModel.copyWith(id: itemModelId);
 
       emit(state.copyWith(

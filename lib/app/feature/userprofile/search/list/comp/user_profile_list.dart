@@ -17,7 +17,7 @@ class UserProfileList extends StatelessWidget {
       itemBuilder: (context, index) {
         final person = userProfileList[index];
         return UserProfileCard(
-          profile: person,
+          userProfile: person,
         );
       },
     );

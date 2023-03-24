@@ -26,7 +26,7 @@ class AppImageShow extends StatelessWidget {
           : const SizedBox(
               // height: height,
               // width: width,
-              child: Icon(Icons.person_outline),
+              child: Icon(Icons.image_not_supported_outlined),
             ),
     );
   }

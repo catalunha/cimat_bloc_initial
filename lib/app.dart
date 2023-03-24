@@ -5,6 +5,7 @@ import 'app/core/authentication/bloc/authentication_bloc.dart';
 import 'app/core/models/user_model.dart';
 import 'app/core/repositories/user_repository.dart';
 import 'app/data/b4a/table/user/user_b4a.dart';
+import 'app/feature/caution/delivery/caution_delivery_page.dart';
 import 'app/feature/home/home_page.dart';
 import 'app/feature/image/search/image_search_page.dart';
 import 'app/feature/item/addedit/item_addedit_page.dart';
@@ -108,6 +109,7 @@ class _AppViewState extends State<AppView> {
         // },
         '/item/addedit': (_) => const ItemAddEditPage(),
         '/item/search': (_) => const ItemSearchPage(),
+        '/caution/delivery': (_) => const CautionDeliveryPage(),
       },
       initialRoute: '/',
     );
