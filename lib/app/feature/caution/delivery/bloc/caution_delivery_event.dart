@@ -1,3 +1,5 @@
+import 'package:cimat_bloc/app/core/models/user_profile_model.dart';
+
 abstract class CautionDeliveryEvent {}
 
 class CautionDeliveryEventItemSubmitted extends CautionDeliveryEvent {
@@ -9,12 +11,9 @@ class CautionDeliveryEventItemSubmitted extends CautionDeliveryEvent {
   });
 }
 
-class CautionDeliveryEventQuantitySubmitted extends CautionDeliveryEvent {
-  final String quantity;
-  CautionDeliveryEventQuantitySubmitted({
-    required this.quantity,
-  });
-}
+class CautionDeliveryEventQuantityIncrement extends CautionDeliveryEvent {}
+
+class CautionDeliveryEventQuantityDecrement extends CautionDeliveryEvent {}
 
 class CautionDeliveryEventUserProfileSubmitted extends CautionDeliveryEvent {
   final String userProfileRegister;
@@ -23,4 +22,9 @@ class CautionDeliveryEventUserProfileSubmitted extends CautionDeliveryEvent {
   });
 }
 
-class CautionDeliveryEventSendOrder extends CautionDeliveryEvent {}
+class CautionDeliveryEventSendOrder extends CautionDeliveryEvent {
+  UserProfileModel userProfileModelDelivery;
+  CautionDeliveryEventSendOrder({
+    required this.userProfileModelDelivery,
+  });
+}
