@@ -91,15 +91,15 @@ class HomePage extends StatelessWidget {
               //   icon: Icons.keyboard_return,
               //   color: Colors.black38,
               // ),
-              // CardHome(
-              //   title: 'Cautelas',
-              //   access: const ['reserva'],
-              //   onAction: () {
-              //     Get.toNamed(Routes.cautionSearch, arguments: false);
-              //   },
-              //   icon: Icons.search,
-              //   color: Colors.black38,
-              // ),
+              HomeCardModule(
+                title: 'Cautelas',
+                access: const ['reserva'],
+                onAction: () {
+                  Navigator.of(context).pushNamed('/caution/search');
+                },
+                icon: Icons.search,
+                color: Colors.black38,
+              ),
               // CardHome(
               //   title: 'Meus itens temporários',
               //   access: const ['operador'],
