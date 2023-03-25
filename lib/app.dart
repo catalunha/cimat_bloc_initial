@@ -112,7 +112,10 @@ class _AppViewState extends State<AppView> {
         '/item/addedit': (_) => const ItemAddEditPage(),
         '/item/search': (_) => const ItemSearchPage(),
         '/caution/delivery': (_) => const CautionDeliveryPage(),
-        '/caution/search': (_) => const CautionSearchPage(),
+        '/caution/search': (context) {
+          bool isOperator = ModalRoute.of(context)!.settings.arguments as bool;
+          return CautionSearchPage(isOperator: isOperator);
+        },
         '/caution/receiver': (_) => const CautionReceiverPage(),
       },
       initialRoute: '/',

@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../core/authentication/bloc/authentication_bloc.dart';
+import '../../../core/models/user_model.dart';
 import '../../../core/repositories/caution_repository.dart';
 import '../../utils/app_icon.dart';
 import '../../utils/app_textformfield.dart';
@@ -11,8 +13,10 @@ import 'bloc/caution_search_state.dart';
 import 'list/caution_search_list_page.dart';
 
 class CautionSearchPage extends StatelessWidget {
+  final bool isOperator;
   const CautionSearchPage({
     Key? key,
+    required this.isOperator,
   }) : super(key: key);
 
   @override
@@ -20,9 +24,16 @@ class CautionSearchPage extends StatelessWidget {
     return RepositoryProvider(
       create: (context) => CautionRepository(),
       child: BlocProvider(
-        create: (context) => CautionSearchBloc(
-            cautionRepository:
-                RepositoryProvider.of<CautionRepository>(context)),
+        create: (context) {
+          UserModel? user;
+          if (isOperator) {
+            user = context.read<AuthenticationBloc>().state.user!;
+          }
+          return CautionSearchBloc(
+              cautionRepository:
+                  RepositoryProvider.of<CautionRepository>(context))
+            ..add(CautionSearchEventIsOperator(user));
+        },
         child: const CautionSearchView(),
       ),
     );

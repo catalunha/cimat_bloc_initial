@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 
 import '../../../../core/models/caution_model.dart';
+import '../../../../core/models/user_model.dart';
 import '../../../../data/b4a/entity/caution_entity.dart';
 
 enum CautionSearchStateStatus { initial, loading, success, error }
@@ -15,6 +16,7 @@ class CautionSearchState {
   final bool firstPage;
   final bool lastPage;
   QueryBuilder<ParseObject> query;
+  final UserModel? userModel;
   CautionSearchState({
     required this.status,
     this.error,
@@ -24,6 +26,7 @@ class CautionSearchState {
     required this.firstPage,
     required this.lastPage,
     required this.query,
+    this.userModel,
   });
   CautionSearchState.initial()
       : status = CautionSearchStateStatus.initial,
@@ -33,7 +36,8 @@ class CautionSearchState {
         limit = 2,
         firstPage = true,
         lastPage = false,
-        query = QueryBuilder<ParseObject>(ParseObject(CautionEntity.className));
+        query = QueryBuilder<ParseObject>(ParseObject(CautionEntity.className)),
+        userModel = null;
 
   CautionSearchState copyWith({
     CautionSearchStateStatus? status,
@@ -44,6 +48,7 @@ class CautionSearchState {
     bool? firstPage,
     bool? lastPage,
     QueryBuilder<ParseObject>? query,
+    UserModel? userModel,
   }) {
     return CautionSearchState(
       status: status ?? this.status,
@@ -54,6 +59,7 @@ class CautionSearchState {
       firstPage: firstPage ?? this.firstPage,
       lastPage: lastPage ?? this.lastPage,
       query: query ?? this.query,
+      userModel: userModel ?? this.userModel,
     );
   }
 
@@ -69,7 +75,8 @@ class CautionSearchState {
         other.limit == limit &&
         other.firstPage == firstPage &&
         other.lastPage == lastPage &&
-        other.query == query;
+        other.query == query &&
+        other.userModel == userModel;
   }
 
   @override
@@ -81,6 +88,7 @@ class CautionSearchState {
         limit.hashCode ^
         firstPage.hashCode ^
         lastPage.hashCode ^
-        query.hashCode;
+        query.hashCode ^
+        userModel.hashCode;
   }
 }

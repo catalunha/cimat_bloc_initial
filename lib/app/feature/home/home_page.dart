@@ -95,7 +95,8 @@ class HomePage extends StatelessWidget {
                 title: 'Cautelas',
                 access: const ['reserva'],
                 onAction: () {
-                  Navigator.of(context).pushNamed('/caution/search');
+                  Navigator.of(context)
+                      .pushNamed('/caution/search', arguments: false);
                 },
                 icon: Icons.search,
                 color: Colors.black38,
@@ -109,25 +110,16 @@ class HomePage extends StatelessWidget {
                 icon: Icons.access_time,
                 color: Colors.black26,
               ),
-              // CardHome(
-              //   title: 'Meus itens permanentes',
-              //   access: const ['operador'],
-              //   onAction: () {
-              //     Get.toNamed(Routes.cautionReceiverPermanent);
-              //   },
-              //   icon: Icons.timelapse,
-              //   color: Colors.black26,
-              // ),
-              // CardHome(
-              //   title: 'Minhas cautelas',
-              //   access: const ['operador'],
-              //   onAction: () {
-              //     // Get.toNamed(Routes.cautionReceiverHistory);
-              //     Get.toNamed(Routes.cautionSearch, arguments: true);
-              //   },
-              //   icon: Icons.av_timer,
-              //   color: Colors.black26,
-              // ),
+              HomeCardModule(
+                title: 'Minhas cautelas',
+                access: const ['operador'],
+                onAction: () {
+                  Navigator.of(context)
+                      .pushNamed('/caution/search', arguments: true);
+                },
+                icon: Icons.av_timer,
+                color: Colors.black26,
+              ),
             ],
           ),
         ),

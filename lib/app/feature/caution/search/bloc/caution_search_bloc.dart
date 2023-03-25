@@ -6,6 +6,7 @@ import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 import '../../../../core/models/caution_model.dart';
 import '../../../../core/repositories/caution_repository.dart';
 import '../../../../data/b4a/entity/caution_entity.dart';
+import '../../../../data/b4a/entity/user_profile_entity.dart';
 import '../../../../data/utils/pagination.dart';
 import 'caution_search_event.dart';
 import 'caution_search_state.dart';
@@ -15,9 +16,14 @@ class CautionSearchBloc extends Bloc<CautionSearchEvent, CautionSearchState> {
   CautionSearchBloc({required CautionRepository cautionRepository})
       : _cautionRepository = cautionRepository,
         super(CautionSearchState.initial()) {
+    on<CautionSearchEventIsOperator>(_onCautionSearchEventIsOperator);
     on<CautionSearchEventFormSubmitted>(_onCautionSearchEventFormSubmitted);
     on<CautionSearchEventPreviousPage>(_onCautionSearchEventPreviousPage);
-    on<UserProfileSearchEventNextPage>(_onUserProfileSearchEventNextPage);
+    on<CautionSearchEventNextPage>(_onCautionSearchEventNextPage);
+  }
+  FutureOr<void> _onCautionSearchEventIsOperator(
+      CautionSearchEventIsOperator event, Emitter<CautionSearchState> emit) {
+    emit(state.copyWith(userModel: event.userModel));
   }
 
   FutureOr<void> _onCautionSearchEventFormSubmitted(
@@ -54,7 +60,13 @@ class CautionSearchBloc extends Bloc<CautionSearchEvent, CautionSearchState> {
             DateTime(DateTime.now().year, DateTime.now().month,
                 DateTime.now().day, 23, 59));
       }
-
+      if (state.userModel != null) {
+        query.whereEqualTo(
+            'receiverUserProfile',
+            (ParseObject(UserProfileEntity.className)
+                  ..objectId = state.userModel!.userProfile!.id)
+                .toPointer());
+      }
       query.orderByDescending('updatedAt');
       List<CautionModel> cautionModelListGet = await _cautionRepository.list(
         query,
@@ -114,8 +126,7 @@ class CautionSearchBloc extends Bloc<CautionSearchEvent, CautionSearchState> {
     }
   }
 
-  FutureOr<void> _onUserProfileSearchEventNextPage(
-      UserProfileSearchEventNextPage event,
+  FutureOr<void> _onCautionSearchEventNextPage(CautionSearchEventNextPage event,
       Emitter<CautionSearchState> emit) async {
     emit(
       state.copyWith(status: CautionSearchStateStatus.loading),

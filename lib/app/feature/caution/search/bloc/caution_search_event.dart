@@ -1,6 +1,15 @@
+import '../../../../core/models/user_model.dart';
+
 abstract class CautionSearchEvent {}
 
-class UserProfileSearchEventNextPage extends CautionSearchEvent {}
+class CautionSearchEventIsOperator extends CautionSearchEvent {
+  UserModel? userModel;
+  CautionSearchEventIsOperator(
+    this.userModel,
+  );
+}
+
+class CautionSearchEventNextPage extends CautionSearchEvent {}
 
 class CautionSearchEventPreviousPage extends CautionSearchEvent {}
 

@@ -71,7 +71,7 @@ class CautionSearchListView extends StatelessWidget {
                         : () {
                             context
                                 .read<CautionSearchBloc>()
-                                .add(UserProfileSearchEventNextPage());
+                                .add(CautionSearchEventNextPage());
                           },
                     child: Card(
                       color: state.lastPage ? Colors.black : Colors.black45,
