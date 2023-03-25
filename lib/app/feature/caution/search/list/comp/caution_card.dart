@@ -90,9 +90,9 @@ class CautionCard extends StatelessWidget {
           ),
           AppTextTitleValue(
             title: 'Situação da análise ? ',
-            value: cautionModel.receiverIsAnalyzingItem == null
+            value: cautionModel.receiverItemWasAccepted == null
                 ? 'Analisando'
-                : cautionModel.receiverIsAnalyzingItem == true
+                : cautionModel.receiverItemWasAccepted == true
                     ? 'Aceito'
                     : 'Recusado',
           ),
@@ -134,9 +134,9 @@ class CautionCard extends StatelessWidget {
             title: 'Situação da recebimento ? ',
             value: cautionModel.receiverIsStartGiveback != true
                 ? '...'
-                : cautionModel.givebackIsAnalyzingItem == null
+                : cautionModel.givebackItemWasAccepted == null
                     ? 'Analisando'
-                    : cautionModel.givebackIsAnalyzingItem == false
+                    : cautionModel.givebackItemWasAccepted == false
                         ? 'Com observações.'
                         : 'Normal',
           ),

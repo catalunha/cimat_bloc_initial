@@ -1,6 +1,6 @@
-import 'package:cimat/app/view/pages/utils/app_textformfield.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+
+import '../../utils/app_textformfield.dart';
 
 class DialogDescription extends StatefulWidget {
   final String title;
@@ -60,7 +60,7 @@ class _DialogDescriptionState extends State<DialogDescription> {
                           final formValid =
                               _formKey.currentState?.validate() ?? false;
                           if (formValid) {
-                            Get.back(result: _objectIdTEC.text);
+                            Navigator.of(context).pop(_objectIdTEC.text);
                           }
                         },
                         child: const Text('Devolver')),

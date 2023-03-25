@@ -18,7 +18,7 @@ class CautionModel {
   // Null: analisando item.
   // False: item recusado.
   // True: item aceito.
-  final bool? receiverIsAnalyzingItem;
+  final bool? receiverItemWasAccepted;
   final DateTime? receiverAnalyzedItemDt;
   final bool? receiverIsPermanentItem;
 
@@ -33,7 +33,7 @@ class CautionModel {
   // Null: analisando item.
   // False: item deve atualizar doc (item.isBlockedOperator=false,item.isBlockedDoc=true).
   // True: item aceito sem obs em doc (item.isBlockedOperator=false)
-  final bool? givebackIsAnalyzingItem;
+  final bool? givebackItemWasAccepted;
   final DateTime? givebackAnalyzedItemDt;
   final String? givebackDescription;
 
@@ -43,14 +43,14 @@ class CautionModel {
     this.deliveryDt,
     this.item,
     this.receiverUserProfile,
-    this.receiverIsAnalyzingItem,
+    this.receiverItemWasAccepted,
     this.receiverAnalyzedItemDt,
     this.receiverIsPermanentItem,
     this.receiverIsStartGiveback,
     this.receiverGivebackItemDt,
     this.receiverGivebackDescription,
     this.givebackUserProfile,
-    this.givebackIsAnalyzingItem,
+    this.givebackItemWasAccepted,
     this.givebackAnalyzedItemDt,
     this.givebackDescription,
   });
@@ -61,14 +61,14 @@ class CautionModel {
     DateTime? deliveryDt,
     ItemModel? item,
     UserProfileModel? receiverUserProfile,
-    bool? receiverIsAnalyzingItem,
+    bool? receiverItemWasAccepted,
     DateTime? receiverAnalyzedItemDt,
     bool? receiverIsPermanentItem,
     bool? receiverIsStartGiveback,
     DateTime? receiverGivebackItemDt,
     String? receiverGivebackDescription,
     UserProfileModel? givebackUserProfile,
-    bool? givebackIsAnalyzingItem,
+    bool? givebackItemWasAccepted,
     DateTime? givebackAnalyzedItemDt,
     String? givebackDescription,
   }) {
@@ -78,8 +78,8 @@ class CautionModel {
       deliveryDt: deliveryDt ?? this.deliveryDt,
       item: item ?? this.item,
       receiverUserProfile: receiverUserProfile ?? this.receiverUserProfile,
-      receiverIsAnalyzingItem:
-          receiverIsAnalyzingItem ?? this.receiverIsAnalyzingItem,
+      receiverItemWasAccepted:
+          receiverItemWasAccepted ?? this.receiverItemWasAccepted,
       receiverAnalyzedItemDt:
           receiverAnalyzedItemDt ?? this.receiverAnalyzedItemDt,
       receiverIsPermanentItem:
@@ -91,8 +91,8 @@ class CautionModel {
       receiverGivebackDescription:
           receiverGivebackDescription ?? this.receiverGivebackDescription,
       givebackUserProfile: givebackUserProfile ?? this.givebackUserProfile,
-      givebackIsAnalyzingItem:
-          givebackIsAnalyzingItem ?? this.givebackIsAnalyzingItem,
+      givebackItemWasAccepted:
+          givebackItemWasAccepted ?? this.givebackItemWasAccepted,
       givebackAnalyzedItemDt:
           givebackAnalyzedItemDt ?? this.givebackAnalyzedItemDt,
       givebackDescription: givebackDescription ?? this.givebackDescription,
@@ -117,8 +117,8 @@ class CautionModel {
     if (receiverUserProfile != null) {
       result.addAll({'receiverUserProfile': receiverUserProfile!.toMap()});
     }
-    if (receiverIsAnalyzingItem != null) {
-      result.addAll({'receiverIsAnalyzingItem': receiverIsAnalyzingItem});
+    if (receiverItemWasAccepted != null) {
+      result.addAll({'receiverItemWasAccepted': receiverItemWasAccepted});
     }
     if (receiverAnalyzedItemDt != null) {
       result.addAll({
@@ -143,8 +143,8 @@ class CautionModel {
     if (givebackUserProfile != null) {
       result.addAll({'givebackUserProfile': givebackUserProfile!.toMap()});
     }
-    if (givebackIsAnalyzingItem != null) {
-      result.addAll({'givebackIsAnalyzingItem': givebackIsAnalyzingItem});
+    if (givebackItemWasAccepted != null) {
+      result.addAll({'givebackItemWasAccepted': givebackItemWasAccepted});
     }
     if (givebackAnalyzedItemDt != null) {
       result.addAll({
@@ -171,7 +171,7 @@ class CautionModel {
       receiverUserProfile: map['receiverUserProfile'] != null
           ? UserProfileModel.fromMap(map['receiverUserProfile'])
           : null,
-      receiverIsAnalyzingItem: map['receiverIsAnalyzingItem'],
+      receiverItemWasAccepted: map['receiverItemWasAccepted'],
       receiverAnalyzedItemDt: map['receiverAnalyzedItemDt'] != null
           ? DateTime.fromMillisecondsSinceEpoch(map['receiverAnalyzedItemDt'])
           : null,
@@ -184,7 +184,7 @@ class CautionModel {
       givebackUserProfile: map['givebackUserProfile'] != null
           ? UserProfileModel.fromMap(map['givebackUserProfile'])
           : null,
-      givebackIsAnalyzingItem: map['givebackIsAnalyzingItem'],
+      givebackItemWasAccepted: map['givebackItemWasAccepted'],
       givebackAnalyzedItemDt: map['givebackAnalyzedItemDt'] != null
           ? DateTime.fromMillisecondsSinceEpoch(map['givebackAnalyzedItemDt'])
           : null,
@@ -199,7 +199,7 @@ class CautionModel {
 
   @override
   String toString() {
-    return 'CautionModel(id: $id, deliveryUserProfile: $deliveryUserProfile, deliveryDt: $deliveryDt, item: $item, receiverUserProfile: $receiverUserProfile, receiverIsAnalyzingItem: $receiverIsAnalyzingItem, receiverAnalyzedItemDt: $receiverAnalyzedItemDt, receiverIsPermanentItem: $receiverIsPermanentItem, receiverIsStartGiveback: $receiverIsStartGiveback, receiverGivebackItemDt: $receiverGivebackItemDt, receiverGivebackDescription: $receiverGivebackDescription, givebackUserProfile: $givebackUserProfile, givebackIsAnalyzingItem: $givebackIsAnalyzingItem, givebackAnalyzedItemDt: $givebackAnalyzedItemDt, givebackDescription: $givebackDescription)';
+    return 'CautionModel(id: $id, deliveryUserProfile: $deliveryUserProfile, deliveryDt: $deliveryDt, item: $item, receiverUserProfile: $receiverUserProfile, receiverItemWasAccepted: $receiverItemWasAccepted, receiverAnalyzedItemDt: $receiverAnalyzedItemDt, receiverIsPermanentItem: $receiverIsPermanentItem, receiverIsStartGiveback: $receiverIsStartGiveback, receiverGivebackItemDt: $receiverGivebackItemDt, receiverGivebackDescription: $receiverGivebackDescription, givebackUserProfile: $givebackUserProfile, givebackItemWasAccepted: $givebackItemWasAccepted, givebackAnalyzedItemDt: $givebackAnalyzedItemDt, givebackDescription: $givebackDescription)';
   }
 
   @override
@@ -212,14 +212,14 @@ class CautionModel {
         other.deliveryDt == deliveryDt &&
         other.item == item &&
         other.receiverUserProfile == receiverUserProfile &&
-        other.receiverIsAnalyzingItem == receiverIsAnalyzingItem &&
+        other.receiverItemWasAccepted == receiverItemWasAccepted &&
         other.receiverAnalyzedItemDt == receiverAnalyzedItemDt &&
         other.receiverIsPermanentItem == receiverIsPermanentItem &&
         other.receiverIsStartGiveback == receiverIsStartGiveback &&
         other.receiverGivebackItemDt == receiverGivebackItemDt &&
         other.receiverGivebackDescription == receiverGivebackDescription &&
         other.givebackUserProfile == givebackUserProfile &&
-        other.givebackIsAnalyzingItem == givebackIsAnalyzingItem &&
+        other.givebackItemWasAccepted == givebackItemWasAccepted &&
         other.givebackAnalyzedItemDt == givebackAnalyzedItemDt &&
         other.givebackDescription == givebackDescription;
   }
@@ -231,14 +231,14 @@ class CautionModel {
         deliveryDt.hashCode ^
         item.hashCode ^
         receiverUserProfile.hashCode ^
-        receiverIsAnalyzingItem.hashCode ^
+        receiverItemWasAccepted.hashCode ^
         receiverAnalyzedItemDt.hashCode ^
         receiverIsPermanentItem.hashCode ^
         receiverIsStartGiveback.hashCode ^
         receiverGivebackItemDt.hashCode ^
         receiverGivebackDescription.hashCode ^
         givebackUserProfile.hashCode ^
-        givebackIsAnalyzingItem.hashCode ^
+        givebackItemWasAccepted.hashCode ^
         givebackAnalyzedItemDt.hashCode ^
         givebackDescription.hashCode;
   }

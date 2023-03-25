@@ -100,15 +100,15 @@ class HomePage extends StatelessWidget {
                 icon: Icons.search,
                 color: Colors.black38,
               ),
-              // CardHome(
-              //   title: 'Meus itens temporários',
-              //   access: const ['operador'],
-              //   onAction: () {
-              //     Get.toNamed(Routes.cautionReceiver);
-              //   },
-              //   icon: Icons.access_time,
-              //   color: Colors.black26,
-              // ),
+              HomeCardModule(
+                title: 'Meus itens',
+                access: const ['operador'],
+                onAction: () {
+                  Navigator.of(context).pushNamed('/caution/receiver');
+                },
+                icon: Icons.access_time,
+                color: Colors.black26,
+              ),
               // CardHome(
               //   title: 'Meus itens permanentes',
               //   access: const ['operador'],

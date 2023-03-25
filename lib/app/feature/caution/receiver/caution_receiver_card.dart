@@ -1,16 +1,17 @@
-import 'package:cimat/app/core/models/caution_model.dart';
-import 'package:cimat/app/view/controllers/caution/receiver/caution_receiver_controller.dart';
-import 'package:cimat/app/view/pages/caution/receiver/dialog_description.dart';
-import 'package:cimat/app/view/pages/utils/app_photo_show.dart';
-import 'package:cimat/app/view/pages/utils/app_text_title_value.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:get/get.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../core/models/caution_model.dart';
+import '../../utils/app_photo_show.dart';
+import '../../utils/app_text_title_value.dart';
+import '../utils/dialog_description.dart';
+import 'bloc/caution_receiver_bloc.dart';
+import 'bloc/caution_receiver_event.dart';
 
 class CautionReceiverCard extends StatefulWidget {
-  final _cautionReceiverController = Get.find<CautionReceiverController>();
   final CautionModel cautionModel;
-  CautionReceiverCard({Key? key, required this.cautionModel}) : super(key: key);
+  const CautionReceiverCard({Key? key, required this.cautionModel})
+      : super(key: key);
 
   @override
   State<CautionReceiverCard> createState() => _CautionReceiverCardState();
@@ -30,26 +31,41 @@ class _CautionReceiverCardState extends State<CautionReceiverCard> {
           Wrap(
             // mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              AppImageShow(
-                photoUrl: widget.cautionModel.deliveryUserProfile!.photo,
-                height: 125,
-                // width: 150,
+              Column(
+                children: [
+                  AppImageShow(
+                    photoUrl: widget.cautionModel.deliveryUserProfile!.photo,
+                    height: 125,
+                    // width: 150,
+                  ),
+                  Text('${widget.cautionModel.deliveryUserProfile?.nickname}'),
+                ],
               ),
-              AppImageShow(
-                photoUrl: widget.cautionModel.item!.image?.url,
-                height: 125,
-                width: 300,
+              Column(
+                children: [
+                  AppImageShow(
+                    photoUrl: widget.cautionModel.item!.image?.photoUrl,
+                    height: 125,
+                    width: 300,
+                  ),
+                  Text(
+                    '${widget.cautionModel.item!.description}',
+                  ),
+                  Text(
+                    'Série: ${widget.cautionModel.item!.serie} Lote: ${widget.cautionModel.item!.lote}',
+                  ),
+                ],
               ),
             ],
           ),
-          Text(
-            '${widget.cautionModel.item!.description}',
-            style: const TextStyle(fontSize: 18),
-          ),
-          Text(
-            '${widget.cautionModel.item!.serie == null || widget.cautionModel.item!.serie!.isEmpty ? '...' : widget.cautionModel.item!.serie} | ${widget.cautionModel.item!.lote == null || widget.cautionModel.item!.lote!.isEmpty ? '...' : widget.cautionModel.item!.lote}',
-            style: const TextStyle(fontSize: 22),
-          ),
+          // Text(
+          //   '${widget.cautionModel.item!.description}',
+          //   style: const TextStyle(fontSize: 18),
+          // ),
+          // Text(
+          //   '${widget.cautionModel.item!.serie == null || widget.cautionModel.item!.serie!.isEmpty ? '...' : widget.cautionModel.item!.serie} | ${widget.cautionModel.item!.lote == null || widget.cautionModel.item!.lote!.isEmpty ? '...' : widget.cautionModel.item!.lote}',
+          //   style: const TextStyle(fontSize: 22),
+          // ),
           // AppTextTitleValue(
           //   title: 'Item: ',
           //   value: widget.cautionModel.item!.description,
@@ -73,9 +89,9 @@ class _CautionReceiverCardState extends State<CautionReceiverCard> {
           // ),
           // AppTextTitleValue(
           //   title: 'Situação da análise ? ',
-          //   value: widget.cautionModel.receiverIsAnalyzingItem == null
+          //   value: widget.cautionModel.receiverItemWasAccepted == null
           //       ? 'Analisando'
-          //       : widget.cautionModel.receiverIsAnalyzingItem == true
+          //       : widget.cautionModel.receiverItemWasAccepted == true
           //           ? 'Aceito'
           //           : 'Recusado',
           // ),
@@ -139,12 +155,10 @@ class _CautionReceiverCardState extends State<CautionReceiverCard> {
           // ),
           Wrap(
             children: [
-              if (widget.cautionModel.receiverIsAnalyzingItem == null)
+              if (widget.cautionModel.receiverItemWasAccepted == null)
                 IconButton(
                   onPressed: () async {
-                    await widget._cautionReceiverController
-                        .updatereceiverIsAnalyzingItemWithRefused(
-                            widget.cautionModel);
+                    var contextLocal = context.read<CautionReceiverBloc>();
                     String? res = await showDialog(
                       barrierDismissible: false,
                       context: context,
@@ -156,23 +170,25 @@ class _CautionReceiverCardState extends State<CautionReceiverCard> {
                       },
                     );
                     if (res != null) {
-                      widget._cautionReceiverController
-                          .updatereceiverIsStartGiveback(
-                              widget.cautionModel, res);
+                      contextLocal
+                          .add(CautionReceiverEventUpdateWasAcceptedWithRefused(
+                        cautionModel: widget.cautionModel,
+                        description: res,
+                      ));
                     }
-                    // setState(() {});
                   },
                   icon: const Icon(
                     Icons.not_interested,
                   ),
                 ),
-              if (widget.cautionModel.receiverIsAnalyzingItem == null)
+              if (widget.cautionModel.receiverItemWasAccepted == null)
                 IconButton(
                   onPressed: () {
-                    // Get.toNamed(Routes.itemAddEdit, arguments: cautionModel);
-                    widget._cautionReceiverController
-                        .updatereceiverIsAnalyzingItemWithAccepted(
-                            widget.cautionModel);
+                    context
+                        .read<CautionReceiverBloc>()
+                        .add(CautionReceiverEventUpdateWasAcceptedWithAccepted(
+                          widget.cautionModel,
+                        ));
                   },
                   icon: const Icon(
                     Icons.check_outlined,
@@ -181,6 +197,8 @@ class _CautionReceiverCardState extends State<CautionReceiverCard> {
               if (widget.cautionModel.receiverIsStartGiveback == false)
                 IconButton(
                   onPressed: () async {
+                    var contextLocal = context.read<CautionReceiverBloc>();
+
                     String? res = await showDialog(
                       barrierDismissible: false,
                       context: context,
@@ -192,52 +210,47 @@ class _CautionReceiverCardState extends State<CautionReceiverCard> {
                       },
                     );
                     if (res != null) {
-                      widget._cautionReceiverController
-                          .updatereceiverIsStartGiveback(
-                              widget.cautionModel, res);
+                      contextLocal
+                          .add(CautionReceiverEventUpdateIsStartGiveback(
+                        cautionModel: widget.cautionModel,
+                        description: res,
+                      ));
                     }
-                    // setState(() {});
                   },
                   icon: const Icon(
                     Icons.assignment_return,
                   ),
                 ),
-              if (widget.cautionModel.receiverIsPermanentItem == false &&
-                  widget.cautionModel.receiverIsAnalyzingItem == true)
+              if (widget.cautionModel.receiverItemWasAccepted == true)
                 IconButton(
                   onPressed: () {
-                    // Get.toNamed(Routes.itemAddEdit, arguments: cautionModel);
-                    widget._cautionReceiverController
-                        .updateReceiverIsPermanentItem(
-                            widget.cautionModel, true);
+                    context
+                        .read<CautionReceiverBloc>()
+                        .add(CautionReceiverEventUpdateIsPermanentItem(
+                          widget.cautionModel,
+                        ));
                   },
-                  icon: const Icon(
-                    Icons.person,
-                  ),
+                  icon: widget.cautionModel.receiverIsPermanentItem == true
+                      ? const Icon(Icons.home)
+                      : const Icon(Icons.person),
                 ),
-              if (widget.cautionModel.receiverIsPermanentItem == true &&
-                  widget.cautionModel.receiverIsAnalyzingItem == true)
-                IconButton(
-                  onPressed: () {
-                    // Get.toNamed(Routes.itemAddEdit, arguments: cautionModel);
-                    widget._cautionReceiverController
-                        .updateReceiverIsPermanentItem(
-                            widget.cautionModel, false);
-                  },
-                  icon: const Icon(
-                    Icons.person_off,
-                  ),
-                ),
+              // if (widget.cautionModel.receiverIsPermanentItem == true &&
+              //     widget.cautionModel.receiverItemWasAccepted == true)
+              //   IconButton(
+              //     onPressed: () {
+              //       // Get.toNamed(Routes.itemAddEdit, arguments: cautionModel);
+              //       widget._cautionReceiverController
+              //           .updateReceiverIsPermanentItem(
+              //               widget.cautionModel, false);
+              //     },
+              //     icon: const Icon(
+              //       Icons.person_off,
+              //     ),
+              //   ),
             ],
           ),
         ],
       ),
     );
-  }
-
-  copy(String text) async {
-    Get.snackbar(text, 'Id copiado.',
-        margin: const EdgeInsets.all(10), duration: const Duration(seconds: 1));
-    await Clipboard.setData(ClipboardData(text: text));
   }
 }

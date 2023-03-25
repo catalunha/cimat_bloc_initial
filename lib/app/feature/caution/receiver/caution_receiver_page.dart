@@ -1,87 +1,110 @@
-import 'package:cimat/app/view/controllers/caution/receiver/caution_receiver_controller.dart';
-import 'package:cimat/app/view/pages/caution/receiver/caution_receiver_card.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class CautionReceiverPage extends StatefulWidget {
-  final _cautionReceiverController = Get.find<CautionReceiverController>();
+import '../../../core/authentication/bloc/authentication_bloc.dart';
+import '../../../core/models/user_model.dart';
+import '../../../core/repositories/caution_repository.dart';
+import 'bloc/caution_receiver_bloc.dart';
+import 'bloc/caution_receiver_event.dart';
+import 'bloc/caution_receiver_state.dart';
+import 'caution_receiver_card.dart';
 
-  CautionReceiverPage({super.key});
+class CautionReceiverPage extends StatelessWidget {
+  const CautionReceiverPage({Key? key}) : super(key: key);
 
   @override
-  State<CautionReceiverPage> createState() => _CautionReceiverPageState();
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: RepositoryProvider(
+        create: (context) => CautionRepository(),
+        child: BlocProvider(
+          create: (context) {
+            UserModel user = context.read<AuthenticationBloc>().state.user!;
+
+            return CautionReceiverBloc(
+                cautionRepository:
+                    RepositoryProvider.of<CautionRepository>(context))
+              ..add(CautionReceiverEventGetCautions(user));
+          },
+          child: const CautionReceiverView(),
+        ),
+      ),
+    );
+  }
 }
 
-class _CautionReceiverPageState extends State<CautionReceiverPage> {
+class CautionReceiverView extends StatefulWidget {
+  const CautionReceiverView({super.key});
+
+  @override
+  State<CautionReceiverView> createState() => _CautionReceiverViewState();
+}
+
+class _CautionReceiverViewState extends State<CautionReceiverView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Obx(
-          () => Text(
-              'Itens temporários: ${widget._cautionReceiverController.cautionList.length}'),
+        title: BlocBuilder<CautionReceiverBloc, CautionReceiverState>(
+          builder: (context, state) {
+            if (state.filteredIsTemporary) {
+              return const Text('Itens temporários');
+            } else {
+              return const Text('Itens permanentes');
+            }
+          },
+        ),
+        actions: [
+          BlocBuilder<CautionReceiverBloc, CautionReceiverState>(
+            builder: (context, state) {
+              if (state.filteredIsTemporary) {
+                return IconButton(
+                    onPressed: () {
+                      context.read<CautionReceiverBloc>().add(
+                          CautionReceiverEventFilterChange(
+                              filterIsTemporary: false));
+                    },
+                    icon: const Icon(Icons.timelapse));
+              } else {
+                return IconButton(
+                    onPressed: () {
+                      context.read<CautionReceiverBloc>().add(
+                          CautionReceiverEventFilterChange(
+                              filterIsTemporary: true));
+                    },
+                    icon: const Icon(Icons.access_time));
+              }
+            },
+          )
+        ],
+      ),
+      body: Center(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 600,
+                child: BlocBuilder<CautionReceiverBloc, CautionReceiverState>(
+                  builder: (context, state) {
+                    return ListView.builder(
+                      itemCount: state.cautionModelListFiltered.length,
+                      itemBuilder: (context, index) {
+                        final cautionModel =
+                            state.cautionModelListFiltered[index];
+                        return CautionReceiverCard(
+                          cautionModel: cautionModel,
+                        );
+                      },
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
-      body: FutureBuilder(
-          future: widget._cautionReceiverController.getCurrentCautions(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            } else {
-              // UserProfileModel userProfileModel = snapshot.data!;
-
-              return Center(
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 600,
-                        child: Obx(
-                          () => ListView.builder(
-                            itemCount: widget
-                                ._cautionReceiverController.cautionList.length,
-                            itemBuilder: (context, index) {
-                              final cautionModel = widget
-                                  ._cautionReceiverController
-                                  .cautionList[index];
-                              return CautionReceiverCard(
-                                cautionModel: cautionModel,
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            }
-          }),
-
-      // body: SingleChildScrollView(
-      //   child: Column(
-      //     children: [
-      //       SizedBox(
-      //         height: 600,
-      //         child: Obx(
-      //           () => ListView.builder(
-      //             itemCount:
-      //                 widget._cautionReceiverController.cautionList.length,
-      //             itemBuilder: (context, index) {
-      //               final cautionModel =
-      //                   widget._cautionReceiverController.cautionList[index];
-      //               return CautionReceiverCard(
-      //                 cautionModel: cautionModel,
-      //               );
-      //             },
-      //           ),
-      //         ),
-      //       ),
-      //     ],
-      //   ),
-      // ),
     );
   }
 }

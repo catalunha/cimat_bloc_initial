@@ -1,27 +1,35 @@
 import 'package:cimat_bloc/app/core/models/caution_model.dart';
-import 'package:cimat_bloc/app/core/models/user_profile_model.dart';
+
+import '../../../../core/models/user_model.dart';
 
 abstract class CautionReceiverEvent {}
 
 class CautionReceiverEventGetCautions extends CautionReceiverEvent {
-  final UserProfileModel userProfileModel;
-  CautionReceiverEventGetCautions({
-    required this.userProfileModel,
+  final UserModel userModel;
+  CautionReceiverEventGetCautions(this.userModel);
+}
+
+class CautionReceiverEventFilterChange extends CautionReceiverEvent {
+  final bool filterIsTemporary;
+  CautionReceiverEventFilterChange({
+    required this.filterIsTemporary,
   });
 }
 
-class CautionReceiverEventUpdateIsAnalyzingItemWithRefused
+class CautionReceiverEventUpdateWasAcceptedWithRefused
     extends CautionReceiverEvent {
   final CautionModel cautionModel;
+  final String description;
 
-  CautionReceiverEventUpdateIsAnalyzingItemWithRefused(this.cautionModel);
+  CautionReceiverEventUpdateWasAcceptedWithRefused(
+      {required this.cautionModel, required this.description});
 }
 
-class CautionReceiverEventUpdateIsAnalyzingItemWithAccepted
+class CautionReceiverEventUpdateWasAcceptedWithAccepted
     extends CautionReceiverEvent {
   final CautionModel cautionModel;
 
-  CautionReceiverEventUpdateIsAnalyzingItemWithAccepted(this.cautionModel);
+  CautionReceiverEventUpdateWasAcceptedWithAccepted(this.cautionModel);
 }
 
 class CautionReceiverEventUpdateIsStartGiveback extends CautionReceiverEvent {
@@ -29,14 +37,12 @@ class CautionReceiverEventUpdateIsStartGiveback extends CautionReceiverEvent {
   final String description;
 
   CautionReceiverEventUpdateIsStartGiveback(
-      this.cautionModel, this.description);
+      {required this.cautionModel, required this.description});
 }
 
 class CautionReceiverEventUpdateIsPermanentItem extends CautionReceiverEvent {
   final CautionModel cautionModel;
-  final bool value;
-  CautionReceiverEventUpdateIsPermanentItem({
-    required this.cautionModel,
-    required this.value,
-  });
+  CautionReceiverEventUpdateIsPermanentItem(
+    this.cautionModel,
+  );
 }

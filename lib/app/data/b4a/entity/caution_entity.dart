@@ -22,7 +22,7 @@ class CautionEntity {
           ? UserProfileEntity()
               .fromParse(parseObject.get('receiverUserProfile'))
           : null,
-      receiverIsAnalyzingItem: parseObject.get('receiverIsAnalyzingItem'),
+      receiverItemWasAccepted: parseObject.get('receiverItemWasAccepted'),
       receiverAnalyzedItemDt:
           parseObject.get<DateTime>('receiverAnalyzedItemDt')?.toLocal(),
       receiverIsPermanentItem: parseObject.get('receiverIsPermanentItem'),
@@ -35,7 +35,7 @@ class CautionEntity {
           ? UserProfileEntity()
               .fromParse(parseObject.get('givebackUserProfile'))
           : null,
-      givebackIsAnalyzingItem: parseObject.get('givebackIsAnalyzingItem'),
+      givebackItemWasAccepted: parseObject.get('givebackItemWasAccepted'),
       givebackAnalyzedItemDt:
           parseObject.get<DateTime>('givebackAnalyzedItemDt')?.toLocal(),
       givebackDescription: parseObject.get('givebackDescription'),
@@ -70,9 +70,9 @@ class CautionEntity {
                 ..objectId = cautionModel.receiverUserProfile!.id)
               .toPointer());
     }
-    if (cautionModel.receiverIsAnalyzingItem != null) {
+    if (cautionModel.receiverItemWasAccepted != null) {
       cautionParseObject.set(
-          'receiverIsAnalyzingItem', cautionModel.receiverIsAnalyzingItem);
+          'receiverItemWasAccepted', cautionModel.receiverItemWasAccepted);
     }
     if (cautionModel.receiverAnalyzedItemDt != null) {
       cautionParseObject.set<DateTime?>(
@@ -102,9 +102,9 @@ class CautionEntity {
                 ..objectId = cautionModel.givebackUserProfile!.id)
               .toPointer());
     }
-    if (cautionModel.givebackIsAnalyzingItem != null) {
+    if (cautionModel.givebackItemWasAccepted != null) {
       cautionParseObject.set(
-          'givebackIsAnalyzingItem', cautionModel.givebackIsAnalyzingItem);
+          'givebackItemWasAccepted', cautionModel.givebackItemWasAccepted);
     }
     if (cautionModel.givebackAnalyzedItemDt != null) {
       cautionParseObject.set<DateTime?>(

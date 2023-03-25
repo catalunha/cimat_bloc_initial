@@ -7,36 +7,40 @@ enum CautionReceiverStateStatus { initial, loading, success, error }
 class CautionReceiverState {
   final CautionReceiverStateStatus status;
   final String? error;
-  final List<CautionModel> cautionModelListTemporary;
-  final List<CautionModel> cautionModelListPermanent;
+  final List<CautionModel> cautionModelList;
+  final List<CautionModel> cautionModelListFiltered;
+  final bool filteredIsTemporary;
   final CautionModel? cautionModel;
   CautionReceiverState({
     required this.status,
     this.error,
-    required this.cautionModelListTemporary,
-    required this.cautionModelListPermanent,
+    required this.cautionModelList,
+    required this.cautionModelListFiltered,
+    required this.filteredIsTemporary,
     this.cautionModel,
   });
   CautionReceiverState.initial()
       : status = CautionReceiverStateStatus.initial,
         error = '',
-        cautionModelListTemporary = [],
-        cautionModelListPermanent = [],
+        cautionModelList = [],
+        cautionModelListFiltered = [],
+        filteredIsTemporary = true,
         cautionModel = null;
   CautionReceiverState copyWith({
     CautionReceiverStateStatus? status,
     String? error,
-    List<CautionModel>? cautionModelListTemporary,
-    List<CautionModel>? cautionModelListPermanent,
+    List<CautionModel>? cautionModelList,
+    List<CautionModel>? cautionModelListFiltered,
+    bool? filteredIsTemporary,
     CautionModel? cautionModel,
   }) {
     return CautionReceiverState(
       status: status ?? this.status,
       error: error ?? this.error,
-      cautionModelListTemporary:
-          cautionModelListTemporary ?? this.cautionModelListTemporary,
-      cautionModelListPermanent:
-          cautionModelListPermanent ?? this.cautionModelListPermanent,
+      cautionModelList: cautionModelList ?? this.cautionModelList,
+      cautionModelListFiltered:
+          cautionModelListFiltered ?? this.cautionModelListFiltered,
+      filteredIsTemporary: filteredIsTemporary ?? this.filteredIsTemporary,
       cautionModel: cautionModel ?? this.cautionModel,
     );
   }
@@ -48,10 +52,9 @@ class CautionReceiverState {
     return other is CautionReceiverState &&
         other.status == status &&
         other.error == error &&
-        listEquals(
-            other.cautionModelListTemporary, cautionModelListTemporary) &&
-        listEquals(
-            other.cautionModelListPermanent, cautionModelListPermanent) &&
+        listEquals(other.cautionModelList, cautionModelList) &&
+        listEquals(other.cautionModelListFiltered, cautionModelListFiltered) &&
+        other.filteredIsTemporary == filteredIsTemporary &&
         other.cautionModel == cautionModel;
   }
 
@@ -59,8 +62,9 @@ class CautionReceiverState {
   int get hashCode {
     return status.hashCode ^
         error.hashCode ^
-        cautionModelListTemporary.hashCode ^
-        cautionModelListPermanent.hashCode ^
+        cautionModelList.hashCode ^
+        cautionModelListFiltered.hashCode ^
+        filteredIsTemporary.hashCode ^
         cautionModel.hashCode;
   }
 }
