@@ -10,29 +10,25 @@ class CautionReceiverState {
   final List<CautionModel> cautionModelList;
   final List<CautionModel> cautionModelListFiltered;
   final bool filteredIsTemporary;
-  final CautionModel? cautionModel;
   CautionReceiverState({
     required this.status,
     this.error,
     required this.cautionModelList,
     required this.cautionModelListFiltered,
     required this.filteredIsTemporary,
-    this.cautionModel,
   });
   CautionReceiverState.initial()
       : status = CautionReceiverStateStatus.initial,
         error = '',
         cautionModelList = [],
         cautionModelListFiltered = [],
-        filteredIsTemporary = true,
-        cautionModel = null;
+        filteredIsTemporary = true;
   CautionReceiverState copyWith({
     CautionReceiverStateStatus? status,
     String? error,
     List<CautionModel>? cautionModelList,
     List<CautionModel>? cautionModelListFiltered,
     bool? filteredIsTemporary,
-    CautionModel? cautionModel,
   }) {
     return CautionReceiverState(
       status: status ?? this.status,
@@ -41,7 +37,6 @@ class CautionReceiverState {
       cautionModelListFiltered:
           cautionModelListFiltered ?? this.cautionModelListFiltered,
       filteredIsTemporary: filteredIsTemporary ?? this.filteredIsTemporary,
-      cautionModel: cautionModel ?? this.cautionModel,
     );
   }
 
@@ -54,8 +49,7 @@ class CautionReceiverState {
         other.error == error &&
         listEquals(other.cautionModelList, cautionModelList) &&
         listEquals(other.cautionModelListFiltered, cautionModelListFiltered) &&
-        other.filteredIsTemporary == filteredIsTemporary &&
-        other.cautionModel == cautionModel;
+        other.filteredIsTemporary == filteredIsTemporary;
   }
 
   @override
@@ -64,7 +58,6 @@ class CautionReceiverState {
         error.hashCode ^
         cautionModelList.hashCode ^
         cautionModelListFiltered.hashCode ^
-        filteredIsTemporary.hashCode ^
-        cautionModel.hashCode;
+        filteredIsTemporary.hashCode;
   }
 }

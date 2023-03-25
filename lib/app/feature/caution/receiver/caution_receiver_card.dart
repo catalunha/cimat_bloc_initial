@@ -136,9 +136,9 @@ class _CautionReceiverCardState extends State<CautionReceiverCard> {
           //   title: 'Situação da recebimento ? ',
           //   value: widget.cautionModel.receiverIsStartGiveback != true
           //       ? '...'
-          //       : widget.cautionModel.givebackIsAnalyzingItem == null
+          //       : widget.cautionModel.givebackItemWasAccepted == null
           //           ? 'Analisando'
-          //           : widget.cautionModel.givebackIsAnalyzingItem == false
+          //           : widget.cautionModel.givebackItemWasAccepted == false
           //               ? 'Com observações.'
           //               : 'Normal',
           // ),

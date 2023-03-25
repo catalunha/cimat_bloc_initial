@@ -78,30 +78,55 @@ class _CautionReceiverViewState extends State<CautionReceiverView> {
           )
         ],
       ),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: 600,
-                child: BlocBuilder<CautionReceiverBloc, CautionReceiverState>(
-                  builder: (context, state) {
-                    return ListView.builder(
-                      itemCount: state.cautionModelListFiltered.length,
-                      itemBuilder: (context, index) {
-                        final cautionModel =
-                            state.cautionModelListFiltered[index];
-                        return CautionReceiverCard(
-                          cautionModel: cautionModel,
-                        );
-                      },
-                    );
-                  },
+      body: BlocListener<CautionReceiverBloc, CautionReceiverState>(
+        listenWhen: (previous, current) {
+          return previous.status != current.status;
+        },
+        listener: (context, state) async {
+          if (state.status == CautionReceiverStateStatus.error) {
+            Navigator.of(context).pop();
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(SnackBar(content: Text(state.error ?? '...')));
+          }
+          if (state.status == CautionReceiverStateStatus.success) {
+            Navigator.of(context).pop();
+          }
+          if (state.status == CautionReceiverStateStatus.loading) {
+            await showDialog(
+              barrierDismissible: false,
+              context: context,
+              builder: (BuildContext context) {
+                return const Center(child: CircularProgressIndicator());
+              },
+            );
+          }
+        },
+        child: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 600,
+                  child: BlocBuilder<CautionReceiverBloc, CautionReceiverState>(
+                    builder: (context, state) {
+                      return ListView.builder(
+                        itemCount: state.cautionModelListFiltered.length,
+                        itemBuilder: (context, index) {
+                          final cautionModel =
+                              state.cautionModelListFiltered[index];
+                          return CautionReceiverCard(
+                            cautionModel: cautionModel,
+                          );
+                        },
+                      );
+                    },
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

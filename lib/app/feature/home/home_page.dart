@@ -82,15 +82,15 @@ class HomePage extends StatelessWidget {
                 icon: Icons.keyboard_tab,
                 color: Colors.black38,
               ),
-              // CardHome(
-              //   title: 'Receber item',
-              //   access: const ['reserva'],
-              //   onAction: () {
-              //     Get.toNamed(Routes.cautionGiveback);
-              //   },
-              //   icon: Icons.keyboard_return,
-              //   color: Colors.black38,
-              // ),
+              HomeCardModule(
+                title: 'Receber item',
+                access: const ['reserva'],
+                onAction: () {
+                  Navigator.of(context).pushNamed('/caution/giveback');
+                },
+                icon: Icons.keyboard_return,
+                color: Colors.black38,
+              ),
               HomeCardModule(
                 title: 'Cautelas',
                 access: const ['reserva'],

@@ -6,6 +6,7 @@ import 'app/core/models/user_model.dart';
 import 'app/core/repositories/user_repository.dart';
 import 'app/data/b4a/table/user/user_b4a.dart';
 import 'app/feature/caution/delivery/caution_delivery_page.dart';
+import 'app/feature/caution/giveback/caution_giveback_page.dart';
 import 'app/feature/caution/receiver/caution_receiver_page.dart';
 import 'app/feature/caution/search/caution_search_page.dart';
 import 'app/feature/home/home_page.dart';
@@ -117,6 +118,7 @@ class _AppViewState extends State<AppView> {
           return CautionSearchPage(isOperator: isOperator);
         },
         '/caution/receiver': (_) => const CautionReceiverPage(),
+        '/caution/giveback': (_) => const CautionGivebackPage(),
       },
       initialRoute: '/',
     );
